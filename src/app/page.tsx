@@ -17,5 +17,7 @@ export default function Page() {
     }
   }, [isAuthenticated, router]);
 
+  
+
   return null;
 }
