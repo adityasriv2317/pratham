@@ -1,21 +1,19 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
-export default function Home() {
+export default function Page() {
   const router = useRouter();
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  );
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push("/login");
+      router.push('/pages/login');
     } else {
-      router.push("/home");
+      router.push('/pages/home');
     }
   }, [isAuthenticated, router]);
 
