@@ -2,6 +2,8 @@ import { useState } from "react";
 import Loader from "../components/Loader";
 import axios from "axios";
 
+import img from "@/assets/splash.jpeg";
+
 const roles = [
   { label: "Patient", value: "patient" },
   { label: "Doctor", value: "doctor" },
@@ -110,13 +112,13 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex font-oxanium items-stretch bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
+    <div className="min-h-screen max-h-screen flex font-oxanium items-stretch bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
       {/* Left side image section */}
-      <div className="hidden md:flex w-1/2 items-center justify-center bg-gray-950">
+      <div className="hidden md:flex w-1/2 min-h-screen max-h-screen items-center justify-center bg-gray-950">
         <img
-          src="/next.svg"
+          src={img.src}
           alt="Pratham Hospital Management"
-          className="object-contain max-h-[400px] p-12 drop-shadow-2xl"
+          className="object-cover min-h-screen max-h-screen drop-shadow-2xl"
         />
       </div>
       {/* Right side register form */}
@@ -143,17 +145,18 @@ export default function Register() {
                 {/* User Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
-                  strokeWidth={1.5}
+                  fill="none"
                   stroke="currentColor"
-                  className="w-5 h-5"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  className="lucide p-1 lucide-user-icon lucide-user"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 17.25v.75A2.25 2.25 0 0113.5 20.25h-3A2.25 2.25 0 018.25 18v-.75m7.5 0a4.5 4.5 0 10-9 0m9 0v-.75A2.25 2.25 0 0016.5 15h-9a2.25 2.25 0 00-2.25 2.25v.75m13.5 0v-.75A2.25 2.25 0 0016.5 15h-9a2.25 2.25 0 00-2.25 2.25v.75"
-                  />
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
                 </svg>
               </span>
               <input

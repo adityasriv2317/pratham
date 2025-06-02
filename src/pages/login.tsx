@@ -4,6 +4,8 @@
 import { useState } from "react";
 import Loader from "../components/Loader";
 
+import img from '@/assets/splash.jpeg'
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,9 +34,9 @@ export default function Login() {
       {/* Left side image section */}
       <div className="hidden md:flex w-1/2 items-center justify-center bg-gray-950">
         <img
-          src="/next.svg"
+          src={img.src}
           alt="Pratham Hospital Management"
-          className="object-contain max-h-[400px] p-12 drop-shadow-2xl"
+          className="object-cover max-h-screen min-h-screen drop-shadow-2xl"
         />
       </div>
       {/* Right side login form */}
