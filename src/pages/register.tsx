@@ -5,7 +5,7 @@ import axios from "axios";
 const roles = [
   { label: "Patient", value: "patient" },
   { label: "Doctor", value: "doctor" },
-  { label: "Nurse", value: "nurse" },
+  { label: "Staff", value: "staff" },
   { label: "Admin", value: "admin" },
 ];
 
@@ -15,7 +15,7 @@ export default function Register() {
     email: "",
     password: "",
     role: "patient",
-    gender: "male",
+    gender: "Male",
     age: "",
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +29,7 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  //   submit handler for registration
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -50,7 +51,7 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      const res = await axios.post("/api/register", {
+      const res = await axios.post("/api/user/register", {
         ...form,
         age: Number(form.age),
       });
@@ -60,7 +61,7 @@ export default function Register() {
         email: "",
         password: "",
         role: "patient",
-        gender: "male",
+        gender: "Male",
         age: "",
       });
     } catch (err: any) {
@@ -68,6 +69,41 @@ export default function Register() {
         err.response?.data?.message || err.message || "Registration failed"
       );
       console.error("Registration error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //   submit handler for admin registration
+  const handleAdminSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    if (!form.name || !form.email || !form.password || !form.role) {
+      setError("All fields are required.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await axios.post("/api/admin/register", {
+        ...form,
+      });
+      setSuccess("Admin registration successful! Please login.");
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+        role: "admin",
+        gender: "",
+        age: "",
+      });
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Admin registration failed"
+      );
+      console.error("Admin registration error:", err);
     } finally {
       setLoading(false);
     }
@@ -91,7 +127,10 @@ export default function Register() {
         <p className="text-center text-gray-400 mb-8 text-lg font-medium">
           Create your account
         </p>
-        <form onSubmit={handleSubmit} className="space-y-6 px-8">
+        <form
+          onSubmit={form.role === "admin" ? handleAdminSubmit : handleSubmit}
+          className="space-y-6 px-8"
+        >
           <div>
             <label
               htmlFor="name"
@@ -314,9 +353,9 @@ export default function Register() {
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-lg border border-gray-700 bg-gray-800 text-white shadow-sm px-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
               >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
               </select>
             </div>
           </div>
