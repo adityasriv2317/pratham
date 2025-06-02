@@ -11,11 +11,13 @@ export default function Page() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push('/pages/login');
+      router.push('/login');
     } else {
-      router.push('/pages/home');
+      router.push('/home');
     }
   }, [isAuthenticated, router]);
+
+  
 
   return null;
 }
