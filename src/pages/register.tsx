@@ -1,0 +1,392 @@
+import { useState } from "react";
+import Loader from "../components/Loader";
+import axios from "axios";
+
+const roles = [
+  { label: "Patient", value: "patient" },
+  { label: "Doctor", value: "doctor" },
+  { label: "Nurse", value: "nurse" },
+  { label: "Admin", value: "admin" },
+];
+
+export default function Register() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "patient",
+    gender: "male",
+    age: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    if (
+      !form.name ||
+      !form.email ||
+      !form.password ||
+      !form.role ||
+      !form.gender ||
+      !form.age
+    ) {
+      setError("All fields are required.");
+      return;
+    }
+    if (Number(form.age) < 18) {
+      setError("Minimum age to register is 18.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await axios.post("/api/register", {
+        ...form,
+        age: Number(form.age),
+      });
+      setSuccess("Registration successful! Please login.");
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+        role: "patient",
+        gender: "male",
+        age: "",
+      });
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message || err.message || "Registration failed"
+      );
+      console.error("Registration error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex font-oxanium items-stretch bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
+      {/* Left side image section */}
+      <div className="hidden md:flex w-1/2 items-center justify-center bg-gray-950">
+        <img
+          src="/next.svg"
+          alt="Pratham Hospital Management"
+          className="object-contain max-h-[400px] p-12 drop-shadow-2xl"
+        />
+      </div>
+      {/* Right side register form */}
+      <div className="flex flex-col justify-center w-full md:w-1/2 px-8 py-12 bg-gray-900 bg-opacity-90 shadow-2xl">
+        <h2 className="text-3xl font-extrabold text-center mb-2 text-white tracking-tight">
+          Pratham
+        </h2>
+        <p className="text-center text-gray-400 mb-8 text-lg font-medium">
+          Create your account
+        </p>
+        <form onSubmit={handleSubmit} className="space-y-6 px-8">
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-300"
+            >
+              Name
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                {/* User Icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 17.25v.75A2.25 2.25 0 0113.5 20.25h-3A2.25 2.25 0 018.25 18v-.75m7.5 0a4.5 4.5 0 10-9 0m9 0v-.75A2.25 2.25 0 0016.5 15h-9a2.25 2.25 0 00-2.25 2.25v.75m13.5 0v-.75A2.25 2.25 0 0016.5 15h-9a2.25 2.25 0 00-2.25 2.25v.75"
+                  />
+                </svg>
+              </span>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                value={form.name}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-lg border border-gray-700 bg-gray-800 text-white shadow-sm px-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 placeholder-gray-500"
+                placeholder="Your name"
+              />
+            </div>
+          </div>
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-300"
+            >
+              Email address
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                {/* Email Icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5H4.5a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-.659 1.591l-7.5 7.5a2.25 2.25 0 01-3.182 0l-7.5-7.5A2.25 2.25 0 012.25 6.993V6.75"
+                  />
+                </svg>
+              </span>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={form.email}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-lg border border-gray-700 bg-gray-800 text-white shadow-sm px-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 placeholder-gray-500"
+                placeholder="you@example.com"
+              />
+            </div>
+          </div>
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-300"
+            >
+              Password
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                {/* Lock Icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.5 10.5V7.5a4.5 4.5 0 10-9 0v3m12 0A2.25 2.25 0 0121 12.75v6A2.25 2.25 0 0118.75 21H5.25A2.25 2.25 0 013 18.75v-6A2.25 2.25 0 015.25 10.5h13.5z"
+                  />
+                </svg>
+              </span>
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                required
+                value={form.password}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-lg border border-gray-700 bg-gray-800 text-white shadow-sm px-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 placeholder-gray-500 pr-12"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 hover:text-gray-200 focus:outline-none"
+                tabIndex={-1}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 3l18 18M9.88 9.88A3 3 0 0012 15a3 3 0 002.12-5.12M15 12a3 3 0 11-6 0 3 3 0 016 0zm6.36 2.64A9.77 9.77 0 0021 12c-1.5-2.5-4.5-6-9-6-1.61 0-3.09.37-4.41 1.01M3.64 7.64A9.77 9.77 0 003 12c1.5 2.5 4.5 6 9 6 1.61 0 3.09-.37 4.41-1.01"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm6.36 2.64A9.77 9.77 0 0021 12c-1.5-2.5-4.5-6-9-6-4.5 0-7.5 3.5-9 6a9.77 9.77 0 001.64 2.64M9.88 9.88A3 3 0 0012 15a3 3 0 002.12-5.12"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label
+              htmlFor="role"
+              className="block text-sm font-medium text-gray-300"
+            >
+              Role
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                {/* User Group Icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-6.13a4 4 0 11-8 0 4 4 0 018 0zm6 6.13V18a2 2 0 01-2 2h-3m-6 0H5a2 2 0 01-2-2v-1.87m16 0A4 4 0 0017 12.13"
+                  />
+                </svg>
+              </span>
+              <select
+                id="role"
+                name="role"
+                value={form.role}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-lg border border-gray-700 bg-gray-800 text-white shadow-sm px-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+              >
+                {roles.map((role) => (
+                  <option key={role.value} value={role.value}>
+                    {role.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div>
+            <label
+              htmlFor="gender"
+              className="block text-sm font-medium text-gray-300"
+            >
+              Gender
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                {/* Gender Icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  className="lucide lucide-circle-small-icon lucide-circle-small"
+                >
+                  <circle cx="12" cy="12" r="6" />
+                </svg>
+              </span>
+              <select
+                id="gender"
+                name="gender"
+                value={form.gender}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-lg border border-gray-700 bg-gray-800 text-white shadow-sm px-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+              >
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label
+              htmlFor="age"
+              className="block text-sm font-medium text-gray-300"
+            >
+              Age
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                {/* Age Icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+              </span>
+              <input
+                id="age"
+                name="age"
+                type="number"
+                min="18"
+                required
+                value={form.age}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-lg border border-gray-700 bg-gray-800 text-white shadow-sm px-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 placeholder-gray-500"
+                placeholder="Your age (18+)"
+              />
+            </div>
+          </div>
+          {error && <div className="text-red-400 text-sm">{error}</div>}
+          {success && <div className="text-green-400 text-sm">{success}</div>}
+          <button
+            type="submit"
+            className="w-full py-2 px-4 md:max-w-2/5 md:mx-auto bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-lg shadow flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors disabled:opacity-60 relative"
+            disabled={loading}
+          >
+            {/* Register Icon */}
+
+            {loading ? <Loader /> : "Register"}
+            {!loading && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                className="lucide lucide-chevron-right-icon lucide-chevron-right"
+              >
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            )}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}

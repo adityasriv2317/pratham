@@ -202,6 +202,13 @@ export default function Login() {
               </svg>
             )}
           </button>
+          {/* register user */}
+          <div className="text-center text-gray-400 mt-4">
+            Don't have an account?{" "}
+            <a href="/register" className="text-blue-400 hover:underline">
+              Register here
+            </a>
+          </div>
         </form>
       </div>
     </div>
