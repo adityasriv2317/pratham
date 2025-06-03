@@ -11,7 +11,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ role, children }) => {
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex md:flex-row flex-col h-screen overflow-hidden">
       {/* Sidebar */}
       <Sidebar role={role} />
 
