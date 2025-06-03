@@ -214,7 +214,7 @@ const Sidebar = ({ role }: SidebarProps) => {
             <Link
               href="/profile"
               className={cn(
-                "flex items-center justify-center h-10 w-10 rounded-md transition-colors",
+                "flex items-center px-2 justify-center h-10 w-10 rounded-md transition-colors",
                 textLight,
                 darkBlueHover
               )}
@@ -229,8 +229,9 @@ const Sidebar = ({ role }: SidebarProps) => {
             onClick={() => setDesktopOpen((v) => !v)}
             aria-label={desktopOpen ? "Collapse sidebar" : "Expand sidebar"}
             className={cn(
-              "ml-2 p-2 rounded transition-colors",
+              "p-2 rounded transition-colors",
               darkBlueHover,
+              desktopOpen && "ml-2",
               lightBlue,
               textLight,
               "border border-blue-900"
