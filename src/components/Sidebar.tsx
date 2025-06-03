@@ -114,7 +114,7 @@ const Sidebar = ({ role }: SidebarProps) => {
       {/* Mobile Top Bar */}
       <div
         className={cn(
-          "md:hidden flex items-center justify-between p-4",
+          "md:hidden h-fit w-full flex items-center justify-between p-4",
           darkBlue,
           "sticky top-0 z-50"
         )}
@@ -126,9 +126,18 @@ const Sidebar = ({ role }: SidebarProps) => {
         <button
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
-          className={cn("p-2 rounded", darkBlueHover, textLight)}
+          className={cn(
+            "p-2 rounded",
+            darkBlueHover,
+            textLight,
+            isOpen ? "hidden" : ""
+          )}
         >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {isOpen ? (
+            <X className="h-6 w-6 hidden" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
         </button>
       </div>
 
@@ -149,8 +158,8 @@ const Sidebar = ({ role }: SidebarProps) => {
           </div>
           <nav
             className={cn(
-              "mt-4 flex flex-col space-y-2 px-4",
-              !desktopOpen && "px-1"
+              "mt-4 flex flex-col space-y-2",
+              desktopOpen && "px-4"
             )}
           >
             {desktopOpen
@@ -161,7 +170,7 @@ const Sidebar = ({ role }: SidebarProps) => {
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center gap-3 px-4 py-2 rounded-md transition-colors",
+                        "flex items-center gap-3 px-4  py-2 rounded-md transition-colors",
                         textLight,
                         darkBlueHover,
                         pathname === item.href
@@ -214,7 +223,7 @@ const Sidebar = ({ role }: SidebarProps) => {
             <Link
               href="/profile"
               className={cn(
-                "flex items-center justify-center h-10 w-10 rounded-md transition-colors",
+                "flex items-center px-2 justify-center h-10 w-10 rounded-md transition-colors",
                 textLight,
                 darkBlueHover
               )}
@@ -229,8 +238,9 @@ const Sidebar = ({ role }: SidebarProps) => {
             onClick={() => setDesktopOpen((v) => !v)}
             aria-label={desktopOpen ? "Collapse sidebar" : "Expand sidebar"}
             className={cn(
-              "ml-2 p-2 rounded transition-colors",
+              "p-2 rounded transition-colors",
               darkBlueHover,
+              desktopOpen && "ml-2",
               lightBlue,
               textLight,
               "border border-blue-900"
@@ -249,7 +259,7 @@ const Sidebar = ({ role }: SidebarProps) => {
       {/* Mobile menu overlay */}
       <div
         className={cn(
-          "fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity md:hidden",
+          "fixed inset-0 z-40 bg-gray-950/90 bg-opacity-40 transition-opacity md:hidden",
           isOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
@@ -269,9 +279,19 @@ const Sidebar = ({ role }: SidebarProps) => {
         style={{ transition: "transform 0.3s" }}
       >
         <div>
-          <div className="flex items-center gap-2 p-4 text-2xl font-bold text-blue-100">
-            <Hospital className="h-8 w-8 text-blue-200" />
-            pratham
+          {/* Close button for mobile sidebar */}
+          <div className="flex items-center justify-between p-4">
+            <div className="flex items-center gap-2 text-2xl font-bold text-blue-100">
+              <Hospital className="h-8 w-8 text-blue-200" />
+              pratham
+            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              aria-label="Close menu"
+              className={cn("p-2 rounded", darkBlueHover, textLight, lightBlue)}
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
           <nav className="mt-4 flex flex-col space-y-2 px-4">
             {menuItems[role].map((item) => {
