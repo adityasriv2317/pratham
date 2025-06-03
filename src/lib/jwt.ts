@@ -1,22 +1,29 @@
+// lib/jwt.ts
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-const JWT_EXPIRES_IN = '1h';
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET!;
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET!;
 
-export interface JwtPayload {
-    userId: string;
-    email: string;
-    [key: string]: any;
+export function signAccessToken(payload: object) {
+  return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
 }
 
-export function generateToken(payload: JwtPayload): string {
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+export function signRefreshToken(payload: object) {
+  return jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 }
 
-export function verifyToken(token: string): JwtPayload | null {
-    try {
-        return jwt.verify(token, JWT_SECRET) as JwtPayload;
-    } catch (err) {
-        return null;
-    }
+export function verifyAccessToken(token: string) {
+  try {
+    return jwt.verify(token, ACCESS_TOKEN_SECRET);
+  } catch (err) {
+    return null;
+  }
+}
+
+export function verifyRefreshToken(token: string) {
+  try {
+    return jwt.verify(token, REFRESH_TOKEN_SECRET);
+  } catch (err) {
+    return null;
+  }
 }

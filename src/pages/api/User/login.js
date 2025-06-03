@@ -1,5 +1,6 @@
 import { getUserByEmailAndRole, verifyPassword } from "../../../utils/auth.js";
 import { connectToDB } from "../../../lib/mongodb.js";
+import { signAccessToken, signRefreshToken } from "../../../utils/jwt";
 
 // Ensure the database connection is established
 await connectToDB();
@@ -36,9 +37,18 @@ export default async function handler(req, res) {
     }
 
     const { passwordHash, ...userData } = user;
+    const accessToken = signAccessToken({ id: user._id, role: user.role });
+    const refreshToken = signRefreshToken({ id: user._id, role: user.role });
+
+    res.setHeader("Set-Cookie", [
+      `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=3600`, // 1 hour
+      `refreshToken=${refreshToken}; HttpOnly; Path=/; Max-Age=604800`, // 7 days
+    ]);
 
     // You can implement JWT or session here as needed
-    return res.status(200).json({ message: "Login successful", user: userData });
+    return res
+      .status(200)
+      .json({ message: "Login successful", user: userData });
   } catch (error) {
     console.log("Login error:", error);
     return res.status(500).json({ message: "Internal server error" });
