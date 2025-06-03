@@ -1,8 +1,7 @@
 import { getUserByEmailAndRole, verifyPassword } from "../../../utils/auth.js";
 import { connectToDB } from "../../../lib/mongodb.js";
-import { signAccessToken, signRefreshToken } from "../../../utils/jwt";
+import { signAccessToken, signRefreshToken } from "../../../lib/jwtlib.ts";
 
-// Ensure the database connection is established
 await connectToDB();
 
 export default async function handler(req, res) {
@@ -46,9 +45,7 @@ export default async function handler(req, res) {
     ]);
 
     // You can implement JWT or session here as needed
-    return res
-      .status(200)
-      .json({ message: "Login successful", user: userData });
+    return res.status(200).json(userData);
   } catch (error) {
     console.log("Login error:", error);
     return res.status(500).json({ message: "Internal server error" });

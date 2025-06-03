@@ -6,7 +6,10 @@ import Loader from "../components/Loader";
 import { Metadata } from "next";
 import axios from "axios";
 
+import { authActions } from "@/store/authSlice";
+
 import img from "@/assets/splash.jpeg";
+import { useDispatch } from "react-redux";
 
 export const metadata: Metadata = {
   title: "Pratham",
@@ -22,6 +25,8 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
@@ -36,17 +41,18 @@ export default function Login() {
         password,
         role,
       });
-      if (res.status == 200 && res.data.token) {
-        localStorage.setItem("user", JSON.stringify(res.data));
+      if (res.status == 200) {
+        dispatch(authActions.loginStart(res.data));
         if (remember) {
+          // save token from header to localStorage
           localStorage.setItem("accessToken", res.data.token);
         } else {
           sessionStorage.setItem("accessToken", res.data.token);
         }
+        localStorage.setItem("role", res.data.role);
         console.log("Login successful:", res.data);
         window.location.href = "/dashboard";
-      }
-      else{
+      } else {
         setError("Login failed. Please check your credentials.");
         console.error("Login response error:", res.data);
       }
