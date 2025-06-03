@@ -61,7 +61,7 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      const res = await axios.post("/api/user/register", {
+      const res = await axios.post("/api/users/register", {
         ...form,
         age: Number(form.age),
       });

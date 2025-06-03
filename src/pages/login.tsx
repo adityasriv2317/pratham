@@ -31,14 +31,24 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      const res = await axios.post("/api/user/login", {
+      const res = await axios.post("/api/users/login", {
         email,
         password,
         role,
       });
-      if (res.status == 200) {
+      if (res.status == 200 && res.data.token) {
         localStorage.setItem("user", JSON.stringify(res.data));
+        if (remember) {
+          localStorage.setItem("accessToken", res.data.token);
+        } else {
+          sessionStorage.setItem("accessToken", res.data.token);
+        }
+        console.log("Login successful:", res.data);
         window.location.href = "/dashboard";
+      }
+      else{
+        setError("Login failed. Please check your credentials.");
+        console.error("Login response error:", res.data);
       }
       setLoading(false);
     } catch (err: any) {
