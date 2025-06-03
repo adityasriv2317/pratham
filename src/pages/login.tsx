@@ -33,6 +33,7 @@ export default function Login() {
       setError("Please enter both email and password.");
       return;
     }
+    dispatch(authActions.loginStart());
     setError("");
     setLoading(true);
     try {
@@ -42,18 +43,17 @@ export default function Login() {
         role,
       });
       if (res.status == 200) {
-        dispatch(authActions.loginStart(res.data));
         if (remember) {
           // save token from header to localStorage
           localStorage.setItem("accessToken", res.data.token);
         } else {
           sessionStorage.setItem("accessToken", res.data.token);
         }
-        localStorage.setItem("role", res.data.role);
-        console.log("Login successful:", res.data);
-        window.location.href = "/dashboard";
+        dispatch(authActions.loginSuccess(res.data));
+        window.location.href = "/dashboard/" + role; // Redirect to the dashboard based on role
       } else {
         setError("Login failed. Please check your credentials.");
+        dispatch(authActions.loginFailure(res.data));
         console.error("Login response error:", res.data);
       }
       setLoading(false);

@@ -1,5 +1,8 @@
+'use client'
+
 import React, { ReactNode } from "react";
 import Sidebar from "./Sidebar";
+import { usePathname, useRouter } from "next/navigation";
 
 interface LayoutProps {
   role: "admin" | "doctor" | "staff" | "patient";
