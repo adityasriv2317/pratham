@@ -149,8 +149,8 @@ const Sidebar = ({ role }: SidebarProps) => {
           </div>
           <nav
             className={cn(
-              "mt-4 flex flex-col space-y-2 px-4",
-              !desktopOpen && "px-1"
+              "mt-4 flex flex-col space-y-2",
+              desktopOpen && "px-4"
             )}
           >
             {desktopOpen
@@ -161,7 +161,7 @@ const Sidebar = ({ role }: SidebarProps) => {
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center gap-3 px-4 py-2 rounded-md transition-colors",
+                        "flex items-center gap-3 px-4  py-2 rounded-md transition-colors",
                         textLight,
                         darkBlueHover,
                         pathname === item.href
