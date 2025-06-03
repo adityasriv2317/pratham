@@ -1,5 +1,8 @@
+'use client'
+
 import React, { ReactNode } from "react";
 import Sidebar from "./Sidebar";
+import { usePathname, useRouter } from "next/navigation";
 
 interface LayoutProps {
   role: "admin" | "doctor" | "staff" | "patient";
@@ -13,7 +16,7 @@ const Layout: React.FC<LayoutProps> = ({ role, children }) => {
       <Sidebar role={role} />
 
       {/* Main content area */}
-      <div className="flex flex-col flex-1 overflow-y-auto ml-0 md:ml-64">
+      <div className="flex flex-col flex-1 overflow-y-auto">
         <main className="flex-1 p-6 bg-gray-50">{children}</main>
 
         {/* Footer */}

@@ -25,7 +25,7 @@ export default function Register() {
     email: "",
     password: "",
     role: "patient",
-    gender: "Male",
+    gender: "male",
     age: "",
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -61,7 +61,7 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      const res = await axios.post("/api/user/register", {
+      const res = await axios.post("/api/users/register", {
         ...form,
         age: Number(form.age),
       });
@@ -71,7 +71,7 @@ export default function Register() {
         email: "",
         password: "",
         role: "patient",
-        gender: "Male",
+        gender: "male",
         age: "",
       });
     } catch (err: any) {
@@ -365,9 +365,9 @@ export default function Register() {
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-700 bg-gray-800 text-white shadow-sm px-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
                 >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
                 </select>
               </div>
             </div>

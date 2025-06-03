@@ -6,7 +6,10 @@ import Loader from "../components/Loader";
 import { Metadata } from "next";
 import axios from "axios";
 
+import { authActions } from "@/store/authSlice";
+
 import img from "@/assets/splash.jpeg";
+import { useDispatch } from "react-redux";
 
 export const metadata: Metadata = {
   title: "Pratham",
@@ -22,23 +25,36 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
       setError("Please enter both email and password.");
       return;
     }
+    dispatch(authActions.loginStart());
     setError("");
     setLoading(true);
     try {
-      const res = await axios.post("/api/user/login", {
+      const res = await axios.post("/api/users/login", {
         email,
         password,
         role,
       });
       if (res.status == 200) {
-        localStorage.setItem("user", JSON.stringify(res.data));
-        window.location.href = "/dashboard";
+        if (remember) {
+          // save token from header to localStorage
+          localStorage.setItem("accessToken", res.data.token);
+        } else {
+          sessionStorage.setItem("accessToken", res.data.token);
+        }
+        dispatch(authActions.loginSuccess(res.data));
+        window.location.href = "/dashboard/" + role; // Redirect to the dashboard based on role
+      } else {
+        setError("Login failed. Please check your credentials.");
+        dispatch(authActions.loginFailure(res.data));
+        console.error("Login response error:", res.data);
       }
       setLoading(false);
     } catch (err: any) {
