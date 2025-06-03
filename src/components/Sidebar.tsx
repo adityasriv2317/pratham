@@ -37,7 +37,7 @@ const menuItems: Record<
   { label: string; href: string; icon: React.ElementType }[]
 > = {
   admin: [
-    { label: "Dashboard", href: "/admin/dashboard", icon: BarChart2 },
+    { label: "Dashboard", href: "/dashboard/admin", icon: BarChart2 },
     { label: "Manage Users", href: "/admin/users", icon: Users },
     { label: "Appointments", href: "/admin/appointments", icon: Calendar },
     { label: "Departments", href: "/admin/departments", icon: Folder },
