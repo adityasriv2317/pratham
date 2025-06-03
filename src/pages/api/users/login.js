@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { email, password, role } = req.body;
+  const { email, password, role, remember } = req.body;
 
   if (!email || !password || !role) {
     return res
@@ -43,6 +43,17 @@ export default async function handler(req, res) {
       `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=3600`, // 1 hour
       `refreshToken=${refreshToken}; HttpOnly; Path=/; Max-Age=604800`, // 7 days
     ]);
+
+    if (remember) {
+      res.setHeader("Set-Cookie", [
+        `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=3600`, // 1 hour
+        `refreshToken=${refreshToken}; HttpOnly; Path=/;`, // 7 days
+      ]);
+    } else {
+      res.setHeader("Set-Cookie", [
+        `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=3600`, // 1 hour\
+      ]);
+    }
 
     // You can implement JWT or session here as needed
     return res.status(200).json(userData);

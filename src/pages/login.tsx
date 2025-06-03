@@ -37,14 +37,18 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      const res = await axios.post("/api/users/login", {
-        email,
-        password,
-        role,
-      });
+      const res = await axios.post(
+        "/api/users/login",
+        {
+          email,
+          password,
+          role,
+          remember,
+        },
+        { withCredentials: true }
+      );
       if (res.status == 200) {
         if (remember) {
-          // save token from header to localStorage
           localStorage.setItem("accessToken", res.data.token);
         } else {
           sessionStorage.setItem("accessToken", res.data.token);
