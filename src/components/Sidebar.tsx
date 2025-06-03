@@ -270,9 +270,19 @@ const Sidebar = ({ role }: SidebarProps) => {
         style={{ transition: "transform 0.3s" }}
       >
         <div>
-          <div className="flex items-center gap-2 p-4 text-2xl font-bold text-blue-100">
-            <Hospital className="h-8 w-8 text-blue-200" />
-            pratham
+          {/* Close button for mobile sidebar */}
+          <div className="flex items-center justify-between p-4">
+            <div className="flex items-center gap-2 text-2xl font-bold text-blue-100">
+              <Hospital className="h-8 w-8 text-blue-200" />
+              pratham
+            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              aria-label="Close menu"
+              className={cn("p-2 rounded", darkBlueHover, textLight)}
+            >
+              <X className="h-6 w-6" />
+            </button>
           </div>
           <nav className="mt-4 flex flex-col space-y-2 px-4">
             {menuItems[role].map((item) => {
