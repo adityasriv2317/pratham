@@ -48,6 +48,7 @@ const menuItems = {
 const Sidebar = ({ role }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   const renderLinks = () => (
     <>
@@ -57,7 +58,7 @@ const Sidebar = ({ role }: SidebarProps) => {
           href={item.href}
           className={cn(
             "block px-4 py-2 rounded-md text-gray-700 hover:bg-blue-100",
-            router.pathname === item.href ? "bg-blue-200 font-semibold" : ""
+            pathname === item.href ? "bg-blue-200 font-semibold" : ""
           )}
         >
           {item.label}
