@@ -1,13 +1,13 @@
+import Layout from "@/components/Layout";
 import React from "react";
+import StaffDashboard from "./dashboard";
 
-const AdminDashboard: React.FC = () => {
-    return (
-        <div style={{ padding: "2rem" }}>
-            <h1>Admin Dashboard</h1>
-            <p>Welcome to the admin dashboard. Use the navigation to manage users, view reports, and configure settings.</p>
-            {/* Add dashboard widgets or navigation here */}
-        </div>
-    );
+const StaffDashboardPage: React.FC = () => {
+  return (
+    <Layout role="staff">
+      <StaffDashboard />
+    </Layout>
+  );
 };
 
-export default AdminDashboard;
+export default StaffDashboardPage;
