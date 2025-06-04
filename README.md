@@ -1,8 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pratham - Hospital Management System
+
+Pratham is a comprehensive Hospital Management System built with [Next.js](https://nextjs.org). It streamlines hospital operations, enhances patient care, and improves administrative efficiency.
+
+## Features
+
+- **Patient Registration & Management:** Easily add, update, and track patient records.
+- **Appointment Scheduling:** Book, reschedule, and manage doctor appointments.
+- **Doctor & Staff Management:** Manage profiles, roles, and schedules for doctors and hospital staff.
+- **Billing & Invoicing:** Automated billing, payment tracking, and invoice generation.
+- **Medical Records:** Secure storage and retrieval of patient medical histories and reports.
+- **Inventory Management:** Track medicines, equipment, and other hospital supplies.
+- **Notifications & Alerts:** Automated reminders for appointments, medication, and important updates.
+- **Role-Based Access Control:** Secure access for admins, doctors, staff, and patients.
+- **Analytics & Reporting:** Generate insightful reports on hospital operations and patient care.
 
 ## Getting Started
 
-First, run the development server:
+To run the development server:
 
 ```bash
 npm run dev
@@ -14,23 +28,20 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000) in your browser to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Start editing by modifying `app/page.tsx`. The page auto-updates as you save changes.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) for automatic font optimization and loads [Geist](https://vercel.com/font).
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+- [Next.js Documentation](https://nextjs.org/docs) — Features and API reference
+- [Learn Next.js](https://nextjs.org/learn) — Interactive tutorial
+- [Next.js GitHub](https://github.com/vercel/next.js) — Source code and contributions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Deploy easily on [Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See the [deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more options.
