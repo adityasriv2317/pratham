@@ -1,46 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store";
-import axios from "axios";
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 
 export default function Page() {
-  const router = useRouter();
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  );
-
-  const getLoginStat = async () => {
-    try {
-      const res = await axios.get("/api/auth/relogin", {
-        withCredentials: true,
-      });
-      if (res.data.user) {
-        return res.data.user;
-      }
-      return null;
-    } catch (error) {
-      console.error("Error fetching login status:", error);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const user = await getLoginStat();
-
-      if (!isAuthenticated && user) {
-        router.push(`/dashboard/${user.role}`);
-      } else if (!isAuthenticated && !user) {
-        router.push("/login");
-      } else {
-        router.push("/home");
-      }
-    };
-
-    checkAuth();
-  }, [isAuthenticated, router, getLoginStat]);
+  useAuthRedirect();
   return null;
 }

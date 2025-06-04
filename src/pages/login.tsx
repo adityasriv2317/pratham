@@ -1,7 +1,7 @@
 "use client";
 
 // Login page for Hospital Management System using shadcn/ui and TailwindCSS
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import { Metadata } from "next";
 import axios from "axios";
@@ -10,6 +10,8 @@ import { authActions } from "@/store/authSlice";
 
 import img from "@/assets/splash.jpeg";
 import { useDispatch } from "react-redux";
+import Page from "@/app/page";
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 
 export const metadata: Metadata = {
   title: "Pratham",
@@ -26,6 +28,8 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
+
+  useAuthRedirect();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
