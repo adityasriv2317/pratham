@@ -45,7 +45,7 @@ const menuItems: Record<
     { label: "Reports", href: "/admin/reports", icon: FileText },
   ],
   doctor: [
-    { label: "Dashboard", href: "/doctor/dashboard", icon: BarChart2 },
+    { label: "Dashboard", href: "/dashboard/doctor", icon: BarChart2 },
     { label: "My Patients", href: "/doctor/patients", icon: User },
     { label: "Appointments", href: "/doctor/appointments", icon: Calendar },
     {
@@ -56,7 +56,7 @@ const menuItems: Record<
     { label: "Lab Reports", href: "/doctor/reports", icon: FlaskConical },
   ],
   staff: [
-    { label: "Dashboard", href: "/staff/dashboard", icon: BarChart2 },
+    { label: "Dashboard", href: "/dashboard/staff", icon: BarChart2 },
     { label: "Patient Check-In", href: "/staff/checkin", icon: BookOpen },
     { label: "Appointments", href: "/staff/appointments", icon: Calendar },
     { label: "Bed Management", href: "/staff/bed-management", icon: BedDouble },
