@@ -1,28 +1,46 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import axios from "axios";
 
 export default function Page() {
   const router = useRouter();
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+
+  const getLoginStat = async () => {
+    try {
+      const res = await axios.get("/api/auth/relogin", {
+        withCredentials: true,
+      });
+      if (res.data.user) {
+        return res.data.user;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching login status:", error);
+      return null;
+    }
+  };
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('token');
+    const checkAuth = async () => {
+      const user = await getLoginStat();
 
-    if (!isAuthenticated && accessToken){
-      router.push('/home');
-    }
-    if (!isAuthenticated && !accessToken) {
-      router.push('/login');
-    } else {
-      router.push('/home');
-    }
-  }, [isAuthenticated, router]);
+      if (!isAuthenticated && user) {
+        router.push(`/dashboard/${user.role}`);
+      } else if (!isAuthenticated && !user) {
+        router.push("/login");
+      } else {
+        router.push("/home");
+      }
+    };
 
-  
-
+    checkAuth();
+  }, [isAuthenticated, router, getLoginStat]);
   return null;
 }

@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/store/authSlice.js", "src/lib/jwt.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/store/authSlice.js", "src/lib/jwt.ts", "src/pages/api/auth/relogin.js"],
   "exclude": ["node_modules"]
 }

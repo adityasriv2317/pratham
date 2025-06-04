@@ -45,11 +45,13 @@ export default async function handler(req, res) {
     ]);
 
     if (remember) {
+      console.log("remember");
       res.setHeader("Set-Cookie", [
         `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=3600`, // 1 hour
         `refreshToken=${refreshToken}; HttpOnly; Path=/;`, // 7 days
       ]);
     } else {
+      console.log("not remember");
       res.setHeader("Set-Cookie", [
         `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=3600`, // 1 hour\
       ]);

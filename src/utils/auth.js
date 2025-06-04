@@ -18,10 +18,10 @@ export async function getUserByEmailAndRole(email, role) {
   } else {
     user = await User.findOne(query).lean();
   }
-//   console.log(user, "found user");
-//   if (user) {
-//     user = user.toObject();
-//   }
+  //   console.log(user, "found user");
+  //   if (user) {
+  //     user = user.toObject();
+  //   }
   return user;
 }
 
@@ -29,4 +29,20 @@ export async function getUserByEmailAndRole(email, role) {
 export async function verifyPassword(plainPassword, hashedPassword) {
   if (!plainPassword || !hashedPassword) return false;
   return await bcrypt.compare(plainPassword, hashedPassword);
+}
+
+export async function getUserById(id) {
+  let user = await Admin.findById(id).lean();
+  if (user) return { ...user, role: "admin" };
+
+  user = await Doctor.findById(id).lean();
+  if (user) return { ...user, role: "doctor" };
+
+  user = await Staffs.findById(id).lean();
+  if (user) return { ...user, role: "staff" };
+
+  user = await User.findById(id).lean();
+  if (user) return { ...user, role: "patient" };
+
+  return null;
 }
