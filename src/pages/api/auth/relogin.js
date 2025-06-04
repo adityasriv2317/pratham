@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { connectToDB } from "@/lib/mongodb.js";
 import { getUserById } from "@/utils/auth.js";
 
 const REFRESH_TOKEN_SECRET =
@@ -8,9 +9,12 @@ const ACCESS_TOKEN_SECRET =
   process.env.ACCESS_TOKEN_SECRET || "yourAccessSecret";
 
 export default async function handler(req, res) {
+  await connectToDB();
+
   const refreshToken = req.cookies?.refreshToken;
 
   if (!refreshToken) {
+    console.error("No refresh token provided");
     return res.status(401).json({ message: "No refresh token" });
   }
 
@@ -40,6 +44,7 @@ export default async function handler(req, res) {
     // console.log("logged in");
     return res.status(200).json({ user: { ...user, password: undefined } });
   } catch (err) {
+    console.error("Refresh token error:", err);
     return res.status(401).json({ message: "Invalid refresh token" });
   }
 }

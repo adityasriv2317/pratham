@@ -1,7 +1,7 @@
 "use client";
 
 import Layout from "@/components/Layout";
-import React from "react";
+import React from "react";  
 import AdminDashboard from "./dashboard";
 
 const AdminDashboardPage = () => {
