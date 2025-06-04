@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { ReactNode } from "react";
 import Sidebar from "./Sidebar";
@@ -14,14 +14,8 @@ const Layout: React.FC<LayoutProps> = ({ role, children }) => {
       {/* Sidebar */}
       <Sidebar role={role} />
 
-      {/* Main content area */}
       <div className="flex flex-col flex-1 overflow-y-auto">
-        <main className="flex-1 p-6 bg-gray-50">{children}</main>
-
-        {/* Footer */}
-        <footer className="bg-white border-t text-center py-1 text-sm text-gray-500">
-          &copy; {new Date().getFullYear()} Pratham. All rights reserved.
-        </footer>
+        <main className="flex-1 bg-[#0a2540]">{children}</main>
       </div>
     </div>
   );

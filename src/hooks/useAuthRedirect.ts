@@ -20,7 +20,6 @@ export function useAuthRedirect() {
       }
       return null;
     } catch (error) {
-      console.error("Error fetching login status:", error);
       return null;
     }
   }, []);

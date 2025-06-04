@@ -147,7 +147,7 @@ const Sidebar = ({ role }: SidebarProps) => {
           "hidden md:flex flex-col justify-between z-40 top-0 left-0 h-full transition-all",
           desktopOpen ? "w-64" : "w-16",
           darkBlue,
-          "border-r border-blue-900 shadow-sm"
+          "shadow-sm"
         )}
         style={{ transition: "width 0.3s" }}
       >

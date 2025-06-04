@@ -1,6 +1,6 @@
 const AdminDashboard = () => {
   return (
-    <main className="bg-white min-h-screen">
+    <main className="bg-white p-8 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-blue-900">Admin Dashboard</h1>
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white shadow rounded p-6 border border-blue-100">

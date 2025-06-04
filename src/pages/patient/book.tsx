@@ -1,0 +1,279 @@
+import Layout from "@/components/Layout";
+import React, { useState } from "react";
+
+interface AppointmentForm {
+  department: string;
+  doctor: string;
+  date: string;
+  timeSlot: string;
+  appointmentType: string;
+  reason: string;
+  agree: boolean;
+}
+
+const departments = [
+  { name: "Cardiology", doctors: ["Dr. Smith", "Dr. Patel"] },
+  { name: "Dermatology", doctors: ["Dr. Lee", "Dr. Gupta"] },
+  { name: "Neurology", doctors: ["Dr. Brown", "Dr. Wang"] },
+  { name: "Pediatrics", doctors: ["Dr. Kim", "Dr. Singh"] },
+];
+
+const timeSlots = [
+  "Morning (8:00 AM - 12:00 PM)",
+  "Afternoon (12:00 PM - 4:00 PM)",
+  "Evening (4:00 PM - 8:00 PM)",
+];
+
+const appointmentTypes = [
+  { value: "in-person", label: "In-person" },
+  { value: "teleconsultation", label: "Teleconsultation / Video Call" },
+];
+
+const initialForm: AppointmentForm = {
+  department: "",
+  doctor: "",
+  date: "",
+  timeSlot: "",
+  appointmentType: "",
+  reason: "",
+  agree: false,
+};
+
+const BookAppointment: React.FC = () => {
+  const [form, setForm] = useState(initialForm);
+  const [submitted, setSubmitted] = useState(false);
+
+  const doctors =
+    departments.find((d) => d.name === form.department)?.doctors || [];
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value, type } = e.target;
+    let fieldValue: string | boolean = value;
+    if (type === "checkbox" && e.target instanceof HTMLInputElement) {
+      fieldValue = e.target.checked;
+    }
+    setForm((prev) => ({
+      ...prev,
+      [name]: fieldValue,
+      ...(name === "department" ? { doctor: "" } : {}),
+      ...(name === "timeSlot" && value !== "Specific Time"
+        ? { specificTime: "" }
+        : {}),
+    }));
+  };
+
+  const isFormValid =
+    form.department &&
+    form.doctor &&
+    form.date &&
+    form.timeSlot &&
+    form.appointmentType &&
+    form.reason &&
+    form.agree;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isFormValid) return;
+    setSubmitted(true);
+  };
+
+  return (
+    <Layout role="patient">
+      <div className="mx-auto sm:mt-0 p-6 bg-white border border-gray-200 rounded-2xl shadow-lg md:p-10">
+        <h2 className="text-3xl font-extrabold mb-8 text-center text-blue-900">
+          Book an Appointment
+        </h2>
+        {submitted ? (
+          <div className="flex flex-col items-center md:py-0">
+            <svg
+              className="w-16 h-16 text-green-500 mb-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <p className="custom-dark-blue text-lg font-semibold">
+              Thank you, your appointment has been booked!
+            </p>
+          </div>
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2"
+          >
+            <div className="grid grid-cols-2 w-full mb-2 gap-6 sm:col-span-2">
+              <label className="block font-semibold custom-dark-blue">
+                Department/Specialty
+                <select
+                  name="department"
+                  value={form.department}
+                  onChange={handleChange}
+                  required
+                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 custom-light-blue-ring bg-gray-50"
+                >
+                  <option value="">Select Department</option>
+                  {departments.map((dept) => (
+                    <option key={dept.name} value={dept.name}>
+                      {dept.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="block font-semibold custom-dark-blue">
+                Doctor
+                <select
+                  name="doctor"
+                  value={form.doctor}
+                  onChange={handleChange}
+                  required
+                  disabled={!form.department}
+                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 custom-light-blue-ring bg-gray-50 disabled:bg-gray-100"
+                >
+                  <option value="">Select Doctor</option>
+                  {doctors.map((doc) => (
+                    <option key={doc} value={doc}>
+                      {doc}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="grid grid-cols-2 w-full mb-2 gap-6 sm:col-span-2">
+              <label className="block font-semibold custom-dark-blue">
+                Preferred Date
+                <input
+                  type="date"
+                  name="date"
+                  value={form.date}
+                  onChange={handleChange}
+                  required
+                  min={new Date().toISOString().split("T")[0]}
+                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 custom-light-blue-ring bg-gray-50"
+                />
+              </label>
+              <label className="block font-semibold custom-dark-blue">
+                Preferred Time Slot
+                <select
+                  name="timeSlot"
+                  value={form.timeSlot}
+                  onChange={handleChange}
+                  required
+                  className="w-full mt-1 h-2/3 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 custom-light-blue-ring bg-gray-50"
+                >
+                  <option value="">Select Time Slot</option>
+                  {timeSlots.map((slot) => (
+                    <option key={slot} value={slot}>
+                      {slot}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="sm:col-span-2">
+              <span className="block font-semibold mb-2 custom-dark-blue">
+                Appointment Type
+              </span>
+              <div className="flex gap-6">
+                {appointmentTypes.map((type) => (
+                  <label
+                    key={type.value}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <input
+                      type="radio"
+                      name="appointmentType"
+                      value={type.value}
+                      checked={form.appointmentType === type.value}
+                      onChange={handleChange}
+                      required
+                      className="accent-[#1a4f8c]"
+                    />
+                    <span className="custom-light-blue">{type.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            <div className="sm:col-span-2">
+              <label className="block font-semibold mb-2 custom-dark-blue">
+                Reason for Visit / Symptoms
+                <textarea
+                  name="reason"
+                  value={form.reason}
+                  onChange={handleChange}
+                  required
+                  rows={3}
+                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 custom-light-blue-ring bg-gray-50 resize-none"
+                  placeholder="Describe your symptoms or reason for visit"
+                />
+              </label>
+            </div>
+            <div className="sm:col-span-2 flex items-center">
+              <input
+                type="checkbox"
+                name="agree"
+                checked={form.agree}
+                onChange={handleChange}
+                required
+                className="mr-2 accent-[#1a4f8c]"
+                id="agree"
+              />
+              <label htmlFor="agree" className="text-sm custom-dark-blue">
+                I agree to the{" "}
+                <a
+                  href="#"
+                  className="underline custom-light-blue hover:custom-dark-blue"
+                >
+                  Terms and Conditions
+                </a>
+              </label>
+            </div>
+            <div className="sm:col-span-2 w-full flex justify-center">
+              <button
+                type="submit"
+                disabled={!isFormValid}
+                className="w-2/3 custom-gradient transition-colors ease text-white px-6 py-3 rounded-lg font-bold text-lg shadow disabled:opacity-50"
+              >
+                Book Appointment
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+      <style jsx global>{`
+        .custom-light-blue {
+          color: #1a4f8c !important;
+        }
+        .custom-dark-blue {
+          color: #0a2540 !important;
+        }
+        .custom-light-blue-ring:focus {
+          --tw-ring-color: #1a4f8c !important;
+        }
+        .custom-gradient {
+          background: #0f3b66;
+        }
+        .custom-gradient:hover {
+          background: #1a4f8c;
+        }
+        @media (max-width: 640px) {
+          main {
+            padding: 1.5rem !important;
+            margin-top: 1rem !important;
+          }
+        }
+      `}</style>
+    </Layout>
+  );
+};
+
+export default BookAppointment;

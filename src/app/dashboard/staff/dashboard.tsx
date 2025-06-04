@@ -9,7 +9,7 @@ const staffData = [
 
 export default function StaffDashboard() {
   return (
-    <main className="bg-white min-h-screen">
+    <main className="bg-white p-8 min-h-screen">
       <h1 className="text-3xl font-bold text-blue-900">
         Hospital Staff Dashboard
       </h1>

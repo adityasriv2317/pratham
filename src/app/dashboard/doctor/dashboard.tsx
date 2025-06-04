@@ -1,6 +1,6 @@
 const DoctorDashboard = () => {
     return (
-        <main className="doctor-dashboard-container bg-white text-gray-900 min-h-screen">
+        <main className="doctor-dashboard-container p-8 bg-white text-gray-900 min-h-screen">
             <h1 className="text-3xl font-bold text-gray-900">Welcome, Doctor</h1>
             <section className="mt-8">
                 <h2 className="text-xl font-semibold text-blue-900 mb-2">Today's Overview</h2>
