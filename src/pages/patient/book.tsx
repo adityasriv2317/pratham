@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Loader from "@/components/Loader";
 
 interface AppointmentForm {
   department: string;
@@ -13,10 +14,10 @@ interface AppointmentForm {
 }
 
 const departments = [
-  { name: "Cardiology", doctors: ["Dr. Smith", "Dr. Patel"] },
-  { name: "Dermatology", doctors: ["Dr. Lee", "Dr. Gupta"] },
-  { name: "Neurology", doctors: ["Dr. Brown", "Dr. Wang"] },
-  { name: "Pediatrics", doctors: ["Dr. Kim", "Dr. Singh"] },
+  { name: "Cardiology" },
+  { name: "Dermatology" },
+  { name: "Neurology" },
+  { name: "Pediatrics" },
 ];
 
 const timeSlots = [
@@ -26,8 +27,8 @@ const timeSlots = [
 ];
 
 const appointmentTypes = [
-  { value: "in-person", label: "In-person" },
-  { value: "teleconsultation", label: "Teleconsultation / Video Call" },
+  { value: "in-person", label: "Offline" },
+  { value: "teleconsultation", label: "Online" },
 ];
 
 const initialForm: AppointmentForm = {
@@ -43,9 +44,35 @@ const initialForm: AppointmentForm = {
 const BookAppointment: React.FC = () => {
   const [form, setForm] = useState(initialForm);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [doctorList, setDoctorList] = useState<
+    {
+      _id: string;
+      name: string;
+      department: string;
+    }[]
+  >([]);
+  const [doctorLoading, setDoctorLoading] = useState(false);
 
-  const doctors =
-    departments.find((d) => d.name === form.department)?.doctors || [];
+  useEffect(() => {
+    if (!form.department) {
+      setDoctorList([]);
+      return;
+    }
+    setDoctorLoading(true);
+    axios
+      .get(
+        `/api/doctors/doctors?department=${encodeURIComponent(form.department)}`
+      )
+      .then((res) => {
+        setDoctorList(res.data.doctors || []);
+      })
+      .catch(() => {
+        setDoctorList([]);
+      })
+      .finally(() => setDoctorLoading(false));
+  }, [form.department]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -78,7 +105,12 @@ const BookAppointment: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isFormValid) return;
+    setError(null);
+    if (!isFormValid) {
+      setError("Please fill all required fields and agree to the terms.");
+      return;
+    }
+    setLoading(true);
     try {
       const appointmentData = {
         department: form.department,
@@ -92,18 +124,23 @@ const BookAppointment: React.FC = () => {
       const res = await axios.post("/api/users/book", appointmentData, {
         withCredentials: true,
       });
-      if (res.status === 200) {
+      if (res.status === 201) {
         setForm(initialForm);
         setSubmitted(true);
       } else {
-        console.error("Failed to book appointment");
+        setError("Failed to book appointment. Please try again later.");
       }
-    } catch (error) {
-      console.error("Error booking appointment:", error);
-      alert("Failed to book appointment. Please try again later.");
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        setError(error.response.data.message);
+      } else if (error.response?.data?.error) {
+        setError(error.response.data.error);
+      } else {
+        setError("Failed to book appointment. Please try again later.");
+      }
     } finally {
-      // reset form fields
-      setForm(initialForm);
+      setLoading(false);
+      if (!error) setForm(initialForm);
     }
   };
 
@@ -145,7 +182,7 @@ const BookAppointment: React.FC = () => {
           onSubmit={handleSubmit}
           className="grid grid-cols-1 gap-6 my-auto sm:grid-cols-2"
         >
-          <div className="grid grid-cols-2 w-full mb-2 gap-6 sm:col-span-2">
+          <div className="grid md:grid-cols-2 w-full mb-2 gap-6 sm:col-span-2">
             <label className="block font-semibold custom-dark-blue">
               Department/Specialty
               <select
@@ -170,19 +207,21 @@ const BookAppointment: React.FC = () => {
                 value={form.doctor}
                 onChange={handleChange}
                 required
-                disabled={!form.department}
+                disabled={!form.department || doctorLoading}
                 className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 custom-light-blue-ring bg-gray-50 disabled:bg-gray-100"
               >
-                <option value="">Select Doctor</option>
-                {doctors.map((doc) => (
-                  <option key={doc} value={doc}>
-                    {doc}
+                <option value="">
+                  {doctorLoading ? "Loading..." : "Select Doctor"}
+                </option>
+                {doctorList.map((doc) => (
+                  <option key={doc._id} value={doc._id}>
+                    {doc.name}
                   </option>
                 ))}
               </select>
             </label>
           </div>
-          <div className="grid grid-cols-2 w-full mb-2 gap-6 sm:col-span-2">
+          <div className="grid md:grid-cols-2 w-full mb-2 gap-6 sm:col-span-2">
             <label className="block font-semibold custom-dark-blue">
               Preferred Date
               <input
@@ -221,7 +260,7 @@ const BookAppointment: React.FC = () => {
               {appointmentTypes.map((type) => (
                 <label
                   key={type.value}
-                  className="flex items-center gap-2 cursor-pointer"
+                  className="flex flex-1 items-center gap-2 cursor-pointer"
                 >
                   <input
                     type="radio"
@@ -271,13 +310,18 @@ const BookAppointment: React.FC = () => {
               </a>
             </label>
           </div>
+          {error && (
+            <div className="sm:col-span-2 text-red-600 text-center font-semibold">
+              {error}
+            </div>
+          )}
           <div className="sm:col-span-2 w-full flex justify-center">
             <button
               type="submit"
-              disabled={!isFormValid}
-              className="w-2/3 custom-gradient transition-colors ease text-white px-6 py-3 rounded-lg font-bold text-lg shadow disabled:opacity-50"
+              disabled={!isFormValid || loading}
+              className="w-2/3 custom-gradient transition-colors ease text-white px-6 py-3 rounded-lg font-bold text-lg shadow disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              Book Appointment
+              {loading ? <Loader /> : "Book Appointment"}
             </button>
           </div>
         </form>
