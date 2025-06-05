@@ -40,7 +40,6 @@ const fetchAppointments = async (): Promise<Appointment[]> => {
 
   return appointments.map((a: any) => ({
     id: a.id,
-    patientName: "You",
     doctorName: doctorMap[a.doctor] || a.doctor,
     date: new Date(a.date).toLocaleDateString(),
     time: a.timeSlot,
@@ -57,7 +56,7 @@ const AppointmentAccordion: React.FC<{
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border-b w-7/8 mx-auto border-blue-200 bg-white">
+    <div className="border-b my-2 w-7/8 mx-auto border-blue-200">
       <button
         className={`w-full flex justify-between ease-in-out items-center py-4 px-6 transition-all rounded-t-lg focus:outline-none" ${
           open ? "bg-blue-200" : "bg-white hover:bg-blue-50"
