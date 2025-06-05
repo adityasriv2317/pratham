@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import axios from "axios";
 import React, { useState } from "react";
 
 interface AppointmentForm {
@@ -75,15 +76,40 @@ const BookAppointment: React.FC = () => {
     form.reason &&
     form.agree;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormValid) return;
-    setSubmitted(true);
+    try {
+      const appointmentData = {
+        department: form.department,
+        doctor: form.doctor,
+        date: form.date,
+        timeSlot: form.timeSlot,
+        appointmentType: form.appointmentType,
+        reason: form.reason,
+      };
+
+      const res = await axios.post("/api/users/book", appointmentData, {
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        setForm(initialForm);
+        setSubmitted(true);
+      } else {
+        console.error("Failed to book appointment");
+      }
+    } catch (error) {
+      console.error("Error booking appointment:", error);
+      alert("Failed to book appointment. Please try again later.");
+    } finally {
+      // reset form fields
+      setForm(initialForm);
+    }
   };
 
   return (
     <Layout role="patient">
-      <div className="mx-auto mt-0 p-6 bg-white border border-gray-200 rounded-2xl shadow-lg md:p-10">
+      <div className="mx-auto my-auto h-full p-6 bg-white border border-gray-200 rounded-2xl shadow-lg md:p-10">
         <h2 className="text-3xl font-extrabold mb-8 text-center text-blue-900">
           Book an Appointment
         </h2>

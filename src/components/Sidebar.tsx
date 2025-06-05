@@ -66,9 +66,9 @@ const menuItems: Record<
     { label: "Dashboard", href: "/dashboard/patient", icon: BarChart2 },
     { label: "Book Appointment", href: "/patient/book", icon: Calendar },
     { label: "My Records", href: "/patient/records", icon: FileText },
-    { label: "Lab Reports", href: "/patient/labs", icon: FlaskConical },
-    { label: "Payments", href: "/patient/payments", icon: CreditCard },
-    { label: "Contact Doctor", href: "/patient/contact", icon: MessageCircle },
+    // { label: "Lab Reports", href: "/patient/labs", icon: FlaskConical },
+    // { label: "Payments", href: "/patient/payments", icon: CreditCard },
+    // { label: "Contact Doctor", href: "/patient/contact", icon: MessageCircle },
   ],
 };
 
