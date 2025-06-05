@@ -63,7 +63,9 @@ const BookAppointment: React.FC = () => {
     setDoctorLoading(true);
     axios
       .get(
-        `/api/doctors/doctors?specialization=${encodeURIComponent(form.specialization)}`
+        `/api/doctors/doctors?specialization=${encodeURIComponent(
+          form.specialization
+        )}`
       )
       .then((res) => {
         setDoctorList(res.data.doctors || []);
@@ -146,7 +148,8 @@ const BookAppointment: React.FC = () => {
 
   return (
     <Layout role="patient">
-      <div className="mx-auto my-auto h-full p-6 bg-white border border-gray-200 rounded-2xl shadow-lg md:p-10">
+      {/* <div className="mx-auto my-auto h-full p-6 bg-white border border-gray-200 rounded-2xl shadow-lg md:p-10"> */}
+      <div className="bg-white min-h-screen rounded-2xl p-8">
         <h2 className="text-3xl font-extrabold mb-8 text-center text-blue-900">
           Book an Appointment
         </h2>
@@ -341,12 +344,6 @@ const BookAppointment: React.FC = () => {
         }
         .custom-gradient:hover {
           background: #1a4f8c;
-        }
-        @media (max-width: 640px) {
-          main {
-            padding: 1.5rem !important;
-            margin-top: 1rem !important;
-          }
         }
       `}</style>
     </Layout>

@@ -6,14 +6,17 @@ export default async function handler(req, res) {
 
   if (req.method === "GET") {
     try {
-      const { specialization } = req.query;
+      // Support fetching by ids (comma-separated)
+      const { specialization, ids } = req.query;
       let query = {};
       if (specialization) {
         query.specialization = specialization;
       }
-      // Only return _id and name for dropdown
-      const doctors = await Doctor.find(query, "_id name department");
-      // console.log("Doctors fetched:", doctors);
+      if (ids) {
+        query._id = { $in: ids.split(",") };
+      }
+      // Only return _id and name for dropdown or mapping
+      const doctors = await Doctor.find(query, "_id name specialization");
       res.status(200).json({ success: true, doctors });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
