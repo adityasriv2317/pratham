@@ -57,16 +57,18 @@ const AppointmentAccordion: React.FC<{
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border-b border-blue-200 bg-white">
+    <div className="border-b w-7/8 mx-auto border-blue-200 bg-white">
       <button
-        className="w-full flex justify-between items-center py-4 px-6 bg-white hover:bg-blue-50 transition rounded-t focus:outline-none"
+        className={`w-full flex justify-between ease-in-out items-center py-4 px-6 transition-all rounded-t-lg focus:outline-none" ${
+          open ? "bg-blue-200" : "bg-white hover:bg-blue-50"
+        }`}
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls={`panel-${index}`}
       >
         <div className="flex flex-col text-left">
           <span className="font-semibold text-lg text-blue-800">
-            {appointment.patientName}
+            {appointment.reason}
           </span>
           <span className="text-sm text-blue-600">
             {appointment.date} at {appointment.time}
@@ -91,7 +93,7 @@ const AppointmentAccordion: React.FC<{
       {open && (
         <div
           id={`panel-${index}`}
-          className="px-6 pb-4 bg-blue-50 rounded-b animate-fade-in"
+          className="px-6 pb-4 bg-blue-200 rounded-b-lg animate-fade-in"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -114,10 +116,10 @@ const AppointmentAccordion: React.FC<{
                 {appointment.status}
               </div>
             </div>
-            <div className="md:col-span-2">
+            {/* <div className="md:col-span-2">
               <div className="text-sm text-blue-600">Reason</div>
               <div className="text-blue-800">{appointment.reason}</div>
-            </div>
+            </div> */}
             {appointment.notes && (
               <div className="md:col-span-2">
                 <div className="text-sm text-blue-600">Notes</div>
@@ -178,7 +180,7 @@ const PatientRecordsPage: React.FC = () => {
   return (
     <Layout role="patient">
       <div className="rounded-2xl bg-white min-h-screen mx-auto py-10 px-4">
-        <h1 className="text-3xl font-bold mb-6 text-blue-800">
+        <h1 className="text-3xl text-center font-bold mb-6 text-blue-800">
           Appointment Records
         </h1>
         {loading && (
