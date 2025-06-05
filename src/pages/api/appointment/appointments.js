@@ -12,25 +12,34 @@ export default async function handler(req, res) {
   if (!accessToken) {
     return res.status(401).json({ success: false, message: "Access token required" });
   }
+  let userId;
   try {
-    jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
+    const decoded = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
+    userId = decoded.id;
   } catch (err) {
     return res.status(401).json({ success: false, message: "Invalid or expired access token" });
   }
 
   if (req.method === "GET") {
     try {
-      const { patientId } = req.query;
-      let query = {};
-      if (patientId) {
-        query.patient = patientId;
-      }
+      // Fetch appointments for the logged-in user only
+      const appointments = await Appointment.find({ user: userId })
+        .sort({ date: -1 });
 
-      const appointments = await Appointment.find(query)
-        .populate("patient") // Populate patient details if needed
-        .sort({ date: -1 }); // Sort by most recent
+      // Format appointments using the schema fields
+      const formatted = appointments.map((a) => ({
+        id: a._id,
+        specialization: a.specialization,
+        doctor: a.doctor,
+        date: a.date,
+        timeSlot: a.timeSlot,
+        appointmentType: a.appointmentType,
+        reason: a.reason,
+        status: a.status,
+        createdAt: a.createdAt,
+      }));
 
-      res.status(200).json({ success: true, data: appointments });
+      res.status(200).json({ success: true, data: formatted });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
     }
