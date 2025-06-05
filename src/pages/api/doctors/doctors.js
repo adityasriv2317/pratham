@@ -13,7 +13,11 @@ export default async function handler(req, res) {
         query.specialization = specialization;
       }
       if (ids) {
-        query._id = { $in: ids.split(",") };
+        // Remove empty strings and deduplicate
+        const idArr = Array.from(new Set(ids.split(",").filter(Boolean)));
+        if (idArr.length > 0) {
+          query._id = { $in: idArr };
+        }
       }
       // Only return _id and name for dropdown or mapping
       const doctors = await Doctor.find(query, "_id name specialization");

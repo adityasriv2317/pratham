@@ -14,6 +14,8 @@ type Appointment = {
 };
 
 const fetchAppointments = async (): Promise<Appointment[]> => {
+  // Always run doctor mapping on client only to avoid SSR hydration issues
+  if (typeof window === "undefined") return [];
   const res = await fetch("/api/appointment/appointments");
   if (!res.ok) throw new Error("Failed to fetch appointments");
   const data = await res.json();
@@ -24,10 +26,14 @@ const fetchAppointments = async (): Promise<Appointment[]> => {
   let doctorMap: Record<string, string> = {};
   if (doctorIds.length > 0) {
     try {
-      const docRes = await fetch(`/api/doctors/doctors?ids=${doctorIds.join(",")}`);
+      const docRes = await fetch(
+        `/api/doctors/doctors?ids=${doctorIds.join(",")}`
+      );
       if (docRes.ok) {
         const docData = await docRes.json();
-        doctorMap = Object.fromEntries((docData.doctors || []).map((d: any) => [d._id, d.name]));
+        doctorMap = Object.fromEntries(
+          (docData.doctors || []).map((d: any) => [d._id, d.name])
+        );
       }
     } catch {}
   }
