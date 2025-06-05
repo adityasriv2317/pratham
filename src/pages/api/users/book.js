@@ -36,12 +36,12 @@ export default async function handler(req, res) {
           .json({ success: false, message: "Invalid or expired access token" });
       }
 
-      const { department, doctor, date, timeSlot, appointmentType, reason } =
+      const { specialization, doctor, date, timeSlot, appointmentType, reason } =
         req.body;
 
       // Validate required fields
       if (
-        !department ||
+        !specialization ||
         !doctor ||
         !date ||
         !timeSlot ||
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
       }
 
       const appointment = new Appointment({
-        department,
+        specialization,
         doctor,
         user: userId,
         date,

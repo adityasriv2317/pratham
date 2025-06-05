@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Loader from "@/components/Loader";
 
 interface AppointmentForm {
-  department: string;
+  specialization: string;
   doctor: string;
   date: string;
   timeSlot: string;
@@ -13,7 +13,7 @@ interface AppointmentForm {
   agree: boolean;
 }
 
-const departments = [
+const specializations = [
   { name: "Cardiology" },
   { name: "Dermatology" },
   { name: "Neurology" },
@@ -27,12 +27,12 @@ const timeSlots = [
 ];
 
 const appointmentTypes = [
-  { value: "in-person", label: "Offline" },
-  { value: "teleconsultation", label: "Online" },
+  { value: "offline", label: "Offline" },
+  { value: "online", label: "Online" },
 ];
 
 const initialForm: AppointmentForm = {
-  department: "",
+  specialization: "",
   doctor: "",
   date: "",
   timeSlot: "",
@@ -56,14 +56,14 @@ const BookAppointment: React.FC = () => {
   const [doctorLoading, setDoctorLoading] = useState(false);
 
   useEffect(() => {
-    if (!form.department) {
+    if (!form.specialization) {
       setDoctorList([]);
       return;
     }
     setDoctorLoading(true);
     axios
       .get(
-        `/api/doctors/doctors?department=${encodeURIComponent(form.department)}`
+        `/api/doctors/doctors?specialization=${encodeURIComponent(form.specialization)}`
       )
       .then((res) => {
         setDoctorList(res.data.doctors || []);
@@ -72,7 +72,7 @@ const BookAppointment: React.FC = () => {
         setDoctorList([]);
       })
       .finally(() => setDoctorLoading(false));
-  }, [form.department]);
+  }, [form.specialization]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -87,7 +87,7 @@ const BookAppointment: React.FC = () => {
     setForm((prev) => ({
       ...prev,
       [name]: fieldValue,
-      ...(name === "department" ? { doctor: "" } : {}),
+      ...(name === "specialization" ? { doctor: "" } : {}),
       ...(name === "timeSlot" && value !== "Specific Time"
         ? { specificTime: "" }
         : {}),
@@ -95,7 +95,7 @@ const BookAppointment: React.FC = () => {
   };
 
   const isFormValid =
-    form.department &&
+    form.specialization &&
     form.doctor &&
     form.date &&
     form.timeSlot &&
@@ -113,7 +113,7 @@ const BookAppointment: React.FC = () => {
     setLoading(true);
     try {
       const appointmentData = {
-        department: form.department,
+        specialization: form.specialization,
         doctor: form.doctor,
         date: form.date,
         timeSlot: form.timeSlot,
@@ -184,18 +184,18 @@ const BookAppointment: React.FC = () => {
         >
           <div className="grid md:grid-cols-2 w-full mb-2 gap-6 sm:col-span-2">
             <label className="block font-semibold custom-dark-blue">
-              Department/Specialty
+              Specialization
               <select
-                name="department"
-                value={form.department}
+                name="specialization"
+                value={form.specialization}
                 onChange={handleChange}
                 required
                 className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 custom-light-blue-ring bg-gray-50"
               >
-                <option value="">Select Department</option>
-                {departments.map((dept) => (
-                  <option key={dept.name} value={dept.name}>
-                    {dept.name}
+                <option value="">Select Specialization</option>
+                {specializations.map((spec) => (
+                  <option key={spec.name} value={spec.name}>
+                    {spec.name}
                   </option>
                 ))}
               </select>
@@ -207,7 +207,7 @@ const BookAppointment: React.FC = () => {
                 value={form.doctor}
                 onChange={handleChange}
                 required
-                disabled={!form.department || doctorLoading}
+                disabled={!form.specialization || doctorLoading}
                 className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 custom-light-blue-ring bg-gray-50 disabled:bg-gray-100"
               >
                 <option value="">

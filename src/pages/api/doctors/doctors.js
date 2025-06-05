@@ -6,13 +6,14 @@ export default async function handler(req, res) {
 
   if (req.method === "GET") {
     try {
-      const { department } = req.query;
+      const { specialization } = req.query;
       let query = {};
-      if (department) {
-        query.department = department;
+      if (specialization) {
+        query.specialization = specialization;
       }
       // Only return _id and name for dropdown
       const doctors = await Doctor.find(query, "_id name department");
+      // console.log("Doctors fetched:", doctors);
       res.status(200).json({ success: true, doctors });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
