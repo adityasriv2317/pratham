@@ -56,10 +56,10 @@ const AppointmentAccordion: React.FC<{
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border-b my-2 w-7/8 mx-auto border-blue-200">
+    <div className="my-2 w-full border-blue-200">
       <button
         className={`w-full flex justify-between ease-in-out items-center py-4 px-6 transition-all rounded-t-lg focus:outline-none" ${
-          open ? "bg-blue-200" : "bg-white hover:bg-blue-50"
+          open ? "bg-blue-100 hover:bg-blue-200" : "bg-white border-b border-b-blue-500 hover:bg-blue-50 rounded-b-lg"
         }`}
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
@@ -92,7 +92,7 @@ const AppointmentAccordion: React.FC<{
       {open && (
         <div
           id={`panel-${index}`}
-          className="px-6 pb-4 bg-blue-200 rounded-b-lg animate-fade-in"
+          className="px-6 pb-4 bg-blue-100 rounded-b-lg animate-fade-in"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -115,10 +115,6 @@ const AppointmentAccordion: React.FC<{
                 {appointment.status}
               </div>
             </div>
-            {/* <div className="md:col-span-2">
-              <div className="text-sm text-blue-600">Reason</div>
-              <div className="text-blue-800">{appointment.reason}</div>
-            </div> */}
             {appointment.notes && (
               <div className="md:col-span-2">
                 <div className="text-sm text-blue-600">Notes</div>
@@ -134,7 +130,6 @@ const AppointmentAccordion: React.FC<{
 
 // Skeleton loader for appointments
 const AppointmentSkeleton: React.FC = () => {
-  const [showSkeleton, setShowSkeleton] = useState(true);
 
   return (
     <div className="border-b border-blue-200 bg-white animate-pulse">
@@ -197,7 +192,7 @@ const PatientRecordsPage: React.FC = () => {
           <div className="text-blue-600">No appointments found.</div>
         )}
         {!loading && !error && (
-          <div className="bg-white rounded shadow divide-y divide-blue-200">
+          <div className="rounded mx-auto w-7/8 md:w-3/4">
             {appointments.map((appointment, idx) => (
               <AppointmentAccordion
                 key={appointment.id}
