@@ -38,6 +38,10 @@ const DoctorSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    refreshToken: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
