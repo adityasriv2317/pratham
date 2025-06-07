@@ -43,8 +43,8 @@ const menuItems: Record<
     { label: "Manage Users", href: "/admin/users", icon: Users },
     { label: "Appointments", href: "/admin/appointments", icon: Calendar },
     { label: "Departments", href: "/admin/departments", icon: Folder },
-    { label: "Billing", href: "/admin/billing", icon: CreditCard },
-    { label: "Reports", href: "/admin/reports", icon: FileText },
+    // { label: "Billing", href: "/admin/billing", icon: CreditCard },
+    // { label: "Reports", href: "/admin/reports", icon: FileText },
   ],
   doctor: [
     { label: "Dashboard", href: "/dashboard/doctor", icon: BarChart2 },

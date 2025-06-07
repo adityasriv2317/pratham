@@ -94,7 +94,9 @@ function AccordionItem({ appt, idx, userMap }) {
   return (
     <div className="">
       <button
-        className={` ${open? "bg-blue-100 rounded-t-xl":"rounded-xl"} w-full border border-blue-200 flex justify-between items-center px-6 py-4 focus:outline-none transition-colors hover:bg-blue-50`}
+        className={` ${
+          open ? "bg-blue-100 rounded-t-xl" : "rounded-xl"
+        } w-full border border-blue-200 flex justify-between items-center px-6 py-4 focus:outline-none transition-colors hover:bg-blue-50`}
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls={`panel-${idx}`}
