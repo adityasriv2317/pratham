@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
       return this.role === "patient" ? "approved" : "pending";
     },
   },
-  gender: { type: String, enum: ["male", "female", "other"], required: true },
+  gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
   age: { type: Number, min: 18, required: true },
   refreshToken: { type: String, default: null },
   createdAt: {
