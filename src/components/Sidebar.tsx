@@ -34,6 +34,24 @@ interface SidebarProps {
   role: Role;
 }
 
+const GeminiIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...props}>
+    <circle cx="16" cy="16" r="16" fill="#1A73E8" />
+    <path
+      d="M10.5 10.5c0-1.933 1.567-3.5 3.5-3.5h4c1.933 0 3.5 1.567 3.5 3.5v11c0 1.933-1.567 3.5-3.5 3.5h-4c-1.933 0-3.5-1.567-3.5-3.5v-11Z"
+      fill="#fff"
+      stroke="#4285F4"
+      strokeWidth="1.5"
+    />
+    <path
+      d="M12 12h8M12 20h8"
+      stroke="#4285F4"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
 // Add icon property to each menu item
 const menuItems: Record<
   Role,
@@ -69,6 +87,7 @@ const menuItems: Record<
     { label: "Dashboard", href: "/dashboard/patient", icon: BarChart2 },
     { label: "Book Appointment", href: "/patient/book", icon: Calendar },
     { label: "My Records", href: "/patient/records", icon: FileText },
+    { label: "Instant Checkup", href: "/patient/aicheckup", icon: GeminiIcon },
     // { label: "Lab Reports", href: "/patient/labs", icon: FlaskConical },
     // { label: "Payments", href: "/patient/payments", icon: CreditCard },
     // { label: "Contact Doctor", href: "/patient/contact", icon: MessageCircle },
