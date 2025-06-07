@@ -1,6 +1,7 @@
 import { getUserByEmailAndRole, verifyPassword } from "../../../utils/auth.js";
 import { connectToDB } from "../../../lib/mongodb.js";
 import { signAccessToken, signRefreshToken } from "../../../lib/jwtlib.ts";
+import User from "../../../models/User.js";
 
 await connectToDB();
 
@@ -38,6 +39,25 @@ export default async function handler(req, res) {
     const { passwordHash, ...userData } = user;
     const accessToken = signAccessToken({ id: user._id, role: user.role });
     const refreshToken = signRefreshToken({ id: user._id, role: user.role });
+
+    let Model;
+    if (user.role === "doctor") {
+      Model = (await import("../../../models/Doctor.js")).default;
+    } else if (user.role === "staff") {
+      Model = require("../../../models/Staffs.js"); // CommonJS export
+    } else if (user.role === "admin") {
+      Model = require("../../../models/Admin.js"); // CommonJS export
+    } else {
+      Model = User;
+    }
+    if (
+      typeof Model.updateOne !== "function" &&
+      Model.default &&
+      typeof Model.default.updateOne === "function"
+    ) {
+      Model = Model.default;
+    }
+    await Model.updateOne({ _id: user._id }, { refreshToken });
 
     res.setHeader("Set-Cookie", [
       `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=3600`, // 1 hour

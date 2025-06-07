@@ -7,8 +7,8 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "yourAccessSecret
 export default async function handler(req, res) {
   await connectToDB();
 
-  // Check for access token in cookies
-  const accessToken = req.cookies?.accessToken;
+  // Check for access token in cookies or Authorization header
+  const accessToken = req.cookies?.accessToken || req.headers.authorization?.replace("Bearer ", "");
   if (!accessToken) {
     return res.status(401).json({ success: false, message: "Access token required" });
   }

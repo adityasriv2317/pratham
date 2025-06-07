@@ -5,7 +5,11 @@ const UserSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
   password: String,
-  role: { type: String, enum: ["doctor", "staff", "patient"], default: "patient" },
+  role: {
+    type: String,
+    enum: ["doctor", "staff", "patient"],
+    default: "patient",
+  },
   status: {
     type: String,
     enum: ["approved", "pending"],
@@ -15,6 +19,7 @@ const UserSchema = new mongoose.Schema({
   },
   gender: { type: String, enum: ["male", "female", "other"], required: true },
   age: { type: Number, min: 18, required: true },
+  refreshToken: { type: String, default: null },
 });
 
 export default mongoose.models.User || mongoose.model("User", UserSchema);

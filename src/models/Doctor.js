@@ -14,6 +14,11 @@ const DoctorSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+    role: {
+      type: String,
+      enum: ["doctor", "surgeon", "physician"],
+      default: "doctor",
+    },
     password: {
       type: String,
       required: true,
@@ -32,6 +37,10 @@ const DoctorSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+    },
+    refreshToken: {
+      type: String,
+      default: null,
     },
   },
   {

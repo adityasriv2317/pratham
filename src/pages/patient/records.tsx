@@ -1,6 +1,9 @@
+"use client";
+
 import Layout from "@/components/Layout";
 import React, { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
+import axios from "axios";
 
 type Appointment = {
   id: string;
@@ -14,7 +17,6 @@ type Appointment = {
 };
 
 const fetchAppointments = async (): Promise<Appointment[]> => {
-  // Always run doctor mapping on client only to avoid SSR hydration issues
   if (typeof window === "undefined") return [];
   const res = await fetch("/api/appointment/appointments");
   if (!res.ok) throw new Error("Failed to fetch appointments");
@@ -22,18 +24,22 @@ const fetchAppointments = async (): Promise<Appointment[]> => {
   const appointments = data.data || [];
 
   // Fetch doctor details for mapping ObjectId to name
+  // Fix: doctor field in Appointment is a string, but Doctor model _id is ObjectId
+  // Convert all doctorIds to ObjectId for the query
   const doctorIds = Array.from(new Set(appointments.map((a: any) => a.doctor)));
   let doctorMap: Record<string, string> = {};
   if (doctorIds.length > 0) {
     try {
-      const docRes = await fetch(
-        `/api/doctors/doctors?ids=${doctorIds.join(",")}`
+      // Use string ids directly for the API query
+      const docRes = await axios.get(
+      `/api/doctors/doctors?ids=${doctorIds.join(",")}`,
+      { withCredentials: true }
       );
-      if (docRes.ok) {
-        const docData = await docRes.json();
-        doctorMap = Object.fromEntries(
-          (docData.doctors || []).map((d: any) => [d._id, d.name])
-        );
+      if (docRes.status === 200) {
+      const docData = docRes.data;
+      doctorMap = Object.fromEntries(
+        (docData.doctors || []).map((d: any) => [String(d._id), d.name])
+      );
       }
     } catch {}
   }
@@ -59,7 +65,9 @@ const AppointmentAccordion: React.FC<{
     <div className="my-2 w-full border-blue-200">
       <button
         className={`w-full flex justify-between ease-in-out items-center py-4 px-6 transition-all rounded-t-lg focus:outline-none" ${
-          open ? "bg-blue-100 hover:bg-blue-200" : "bg-white border-b border-b-blue-500 hover:bg-blue-50 rounded-b-lg"
+          open
+            ? "bg-blue-100 hover:bg-blue-200"
+            : "bg-white border-b border-b-blue-500 hover:bg-blue-50 rounded-b-lg"
         }`}
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
@@ -130,7 +138,6 @@ const AppointmentAccordion: React.FC<{
 
 // Skeleton loader for appointments
 const AppointmentSkeleton: React.FC = () => {
-
   return (
     <div className="border-b border-blue-200 bg-white animate-pulse">
       <div className="w-full flex justify-between items-center py-4 px-6">

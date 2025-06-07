@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Users,
+  LogOut,
   Calendar,
   FileText,
   Folder,
@@ -24,6 +25,7 @@ import {
   Contact,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import axios from "axios";
 
 type Role = "admin" | "doctor" | "staff" | "patient";
 
@@ -108,6 +110,23 @@ const Sidebar = ({ role }: SidebarProps) => {
       })}
     </>
   );
+
+  const handleLogout = async () => {
+    try {
+      const res = await axios.post(
+        "api/users/logout",
+        {},
+        { withCredentials: true }
+      );
+      if (res.status === 200) {
+        window.location.href = "/login"; // Redirect to login page
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
 
   return (
     <>
@@ -208,30 +227,63 @@ const Sidebar = ({ role }: SidebarProps) => {
         </div>
         <div className="p-4 border-t border-blue-900 flex items-center justify-between">
           {desktopOpen ? (
-            <Link
-              href="/profile"
-              className={cn(
-                "flex items-center gap-3 w-full px-4 py-2 rounded-md transition-colors",
-                textLight,
-                darkBlueHover
-              )}
-            >
-              <User className="h-5 w-5" />
-              <span>My Profile</span>
-            </Link>
+            <div className="flex flex-col items-center gap-0.5 w-full py-1 rounded-md transition-colors">
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  handleLogout();
+                }}
+                className={cn(
+                  "flex items-center gap-2 cursor-pointer w-full px-4 py-2 rounded-md transition-colors",
+                  darkBlueHover,
+                  textLight
+                )}
+                type="button"
+              >
+                <LogOut className="h-5 w-5 text-red-600 ml-0.5" />
+                <span className="text-red-400">Logout</span>
+              </button>
+              <Link
+                href="/profile"
+                className={cn(
+                  "flex items-center gap-3 w-full px-4 py-2 rounded-md transition-colors",
+                  textLight,
+                  darkBlueHover
+                )}
+              >
+                <User className="h-5 w-5" />
+                <span>Profile</span>
+              </Link>
+            </div>
           ) : (
-            <Link
-              href="/profile"
-              className={cn(
-                "flex items-center px-2 justify-center h-10 w-10 rounded-md transition-colors",
-                textLight,
-                darkBlueHover
-              )}
-              title="My Profile"
-            >
-              <span className="sr-only">My Profile</span>
-              <User className="h-5 w-5" />
-            </Link>
+            <div className="">
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  handleLogout();
+                }}
+                className={cn(
+                  "flex items-center justify-center h-10 w-10 rounded-md transition-colors",
+                  textLight,
+                  darkBlueHover
+                )}
+                type="button"
+              >
+                <LogOut className="h-5 w-5 text-red-600 " />
+              </button>
+              <Link
+                href="/profile"
+                className={cn(
+                  "flex items-center px-2 justify-center h-10 w-10 rounded-md transition-colors",
+                  textLight,
+                  darkBlueHover
+                )}
+                title="My Profile"
+              >
+                <span className="sr-only">My Profile</span>
+                <User className="h-5 w-5" />
+              </Link>
+            </div>
           )}
           {/* Toggle button */}
           <button
@@ -318,6 +370,21 @@ const Sidebar = ({ role }: SidebarProps) => {
           </nav>
         </div>
         <div className="p-4 border-t border-blue-900">
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              handleLogout();
+            }}
+            className={cn(
+              "flex items-center gap-2 w-full px-4 py-2 rounded-md transition-colors",
+              darkBlueHover,
+              textLight
+            )}
+            type="button"
+          >
+            <LogOut className="h-5 w-5 text-red-600 ml-0.5" />
+            <span className="text-red-400">Logout</span>
+          </button>
           <Link
             href="/profile"
             className={cn(
