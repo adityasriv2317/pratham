@@ -36,8 +36,17 @@ export default async function handler(req, res) {
           .json({ success: false, message: "Invalid or expired access token" });
       }
 
-      const { specialization, doctor, date, timeSlot, appointmentType, reason } =
-        req.body;
+      const {
+        specialization,
+        doctor,
+        date,
+        timeSlot,
+        appointmentType,
+        reason,
+      } = req.body;
+
+      let appointmentDate = new Date(date);
+      appointmentDate.setUTCHours(0, 0, 0, 0);
 
       // Validate required fields
       if (

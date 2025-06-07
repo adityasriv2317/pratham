@@ -11,7 +11,6 @@ import {
   CircleArrowRight,
 } from "lucide-react";
 
-// Simple calendar grid for current month
 function getMonthDays(year: number, month: number) {
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
@@ -22,7 +21,7 @@ function getMonthDays(year: number, month: number) {
   return days;
 }
 
-const ScheduleCalendar: React.FC = () => {
+const AdminAppointmentsCalendar: React.FC = () => {
   const [appointments, setAppointments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -33,38 +32,60 @@ const ScheduleCalendar: React.FC = () => {
     return { year: now.getFullYear(), month: now.getMonth() };
   });
   const [userMap, setUserMap] = useState<Record<string, { name: string }>>({});
+  const [doctorMap, setDoctorMap] = useState<Record<string, { name: string }>>(
+    {}
+  );
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setLoading(true);
     axios
-      .get("/api/doctors/appointments", { withCredentials: true })
-      .then((res) => {
+      .get("/api/admin/appointments", { withCredentials: true })
+      .then(async (res) => {
         setAppointments(res.data.data || []);
-        // Fetch patient names for unique user ids
+        // Fetch patient and doctor names for unique user/doctor ids
         const userIds = [
           ...new Set((res.data.data || []).map((a: any) => a.user)),
         ];
+        const doctorIds = [
+          ...new Set((res.data.data || []).map((a: any) => a.doctor)),
+        ];
         if (userIds.length > 0) {
-          axios
-            .get(`/api/users/users?ids=${userIds.join(",")}`, {
-              withCredentials: true,
-            })
-            .then((usersRes) => setUserMap(usersRes.data.data || {}));
+          const usersRes = await axios.get(
+            `/api/users/users?ids=${userIds.join(",")}`,
+            { withCredentials: true }
+          );
+          setUserMap(usersRes.data.data || {});
+        }
+        if (doctorIds.length > 0) {
+          const doctorsRes = await axios.get(
+            `/api/doctors/doctors?ids=${doctorIds.join(",")}`,
+            { withCredentials: true }
+          );
+          // doctorMap: { [id]: { name } }
+          const map: Record<string, { name: string }> = {};
+          (doctorsRes.data.doctors || []).forEach((d: any) => {
+            map[String(d._id)] = { name: d.name };
+          });
+          setDoctorMap(map);
         }
       })
       .catch((err) => setError(err.response?.data?.message || err.message))
       .finally(() => setLoading(false));
   }, []);
 
-  // Map date string (YYYY-MM-DD) to appointments (LOCAL DATE)
+  // Map date string (YYYY-MM-DD) to appointments
   const apptMap: Record<string, any[]> = {};
   appointments.forEach((appt) => {
     const d = new Date(appt.date);
-    const key = d.toLocaleDateString("en-CA"); // Use local date for grouping
+    const key = d.toLocaleDateString("en-CA");
     if (!apptMap[key]) apptMap[key] = [];
     apptMap[key].push(appt);
   });
-  console.log("Appointments map data (local):", apptMap);
 
   const days = getMonthDays(currentMonth.year, currentMonth.month);
   const firstDayOfWeek = new Date(
@@ -79,14 +100,14 @@ const ScheduleCalendar: React.FC = () => {
     : [];
 
   return (
-    <Layout role="doctor">
+    <Layout role="admin">
       <div className="min-h-screen rounded-2xl bg-white py-6 px-1 sm:px-4 flex flex-col items-center">
         <h1 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-4 sm:mb-6 text-center">
-          My Schedule
+          All Appointments
         </h1>
         <div className="bg-blue-50 rounded-2xl mt-[5vh] shadow-lg p-2 sm:p-6 w-full max-w-2xl">
           {/* Skeleton loading animation */}
-          {loading ? (
+          {!mounted || loading ? (
             <div>
               <div className="flex flex-row animate-pulse sm:flex-row justify-between items-center mb-4 gap-2 sm:gap-0">
                 <div
@@ -250,6 +271,10 @@ const ScheduleCalendar: React.FC = () => {
                         <User2 className="w-4 h-4 text-blue-700" />
                         Patient: {userMap?.[appt.user]?.name || appt.user}
                       </div>
+                      <div className="flex items-center gap-2 font-semibold text-blue-900 text-sm sm:text-base">
+                        <User2 className="w-4 h-4 text-blue-700" />
+                        Doctor: {doctorMap?.[appt.doctor]?.name || appt.doctor}
+                      </div>
                       <div className="flex items-center gap-2 text-blue-800 text-sm sm:text-base">
                         <Clock className="w-4 h-4 text-blue-700" /> Time:{" "}
                         {appt.timeSlot}
@@ -275,4 +300,4 @@ const ScheduleCalendar: React.FC = () => {
   );
 };
 
-export default ScheduleCalendar;
+export default AdminAppointmentsCalendar;
