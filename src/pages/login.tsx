@@ -224,7 +224,7 @@ export default function Login() {
               >
                 <option value="patient">Patient</option>
                 <option value="doctor">Doctor</option>
-                <option value="staff">Staff</option>
+                {/* <option value="staff">Staff</option> */}
                 <option value="admin">Admin</option>
               </select>
             </div>

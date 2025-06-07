@@ -43,19 +43,19 @@ const menuItems: Record<
     { label: "Manage Users", href: "/admin/users", icon: Users },
     { label: "Appointments", href: "/admin/appointments", icon: Calendar },
     { label: "Departments", href: "/admin/departments", icon: Folder },
-    { label: "Billing", href: "/admin/billing", icon: CreditCard },
-    { label: "Reports", href: "/admin/reports", icon: FileText },
+    // { label: "Billing", href: "/admin/billing", icon: CreditCard },
+    // { label: "Reports", href: "/admin/reports", icon: FileText },
   ],
   doctor: [
     { label: "Dashboard", href: "/dashboard/doctor", icon: BarChart2 },
     { label: "My Patients", href: "/doctor/patients", icon: User },
-    { label: "Appointments", href: "/doctor/appointments", icon: Calendar },
-    {
-      label: "Prescriptions",
-      href: "/doctor/prescriptions",
-      icon: ClipboardList,
-    },
-    { label: "Lab Reports", href: "/doctor/reports", icon: FlaskConical },
+    { label: "My Schedule", href: "/doctor/schedule", icon: Calendar },
+    // {
+    //   label: "Prescriptions",
+    //   href: "/doctor/prescriptions",
+    //   icon: ClipboardList,
+    // },
+    // { label: "Lab Reports", href: "/doctor/reports", icon: FlaskConical },
   ],
   staff: [
     { label: "Dashboard", href: "/dashboard/staff", icon: BarChart2 },
@@ -78,7 +78,7 @@ const darkBlue = "bg-[#0a2540]"; // Dark blue background
 const darkBlueHover = "hover:bg-[#163e6c]";
 const lightBlue = "bg-[#1a4f8c]";
 const textLight = "text-white";
-const textMuted = "text-blue-100";
+// const textMuted = "text-blue-100";
 
 const Sidebar = ({ role }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(false); // mobile sidebar
@@ -227,7 +227,7 @@ const Sidebar = ({ role }: SidebarProps) => {
         </div>
         <div className="p-4 border-t border-blue-900 flex items-center justify-between">
           {desktopOpen ? (
-            <div className="flex flex-col items-center gap-0.5 w-full py-1 rounded-md transition-colors">
+            <div className="flex flex-col items-center gap-0.5 w-full py-0 rounded-md transition-colors">
               <button
                 onClick={() => {
                   setIsOpen(false);

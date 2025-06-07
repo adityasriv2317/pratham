@@ -59,10 +59,10 @@ export default async function handler(req, res) {
     }
     await Model.updateOne({ _id: user._id }, { refreshToken });
 
-    res.setHeader("Set-Cookie", [
-      `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=3600`, // 1 hour
-      `refreshToken=${refreshToken}; HttpOnly; Path=/; Max-Age=604800`, // 7 days
-    ]);
+    // res.setHeader("Set-Cookie", [
+    //   `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=3600`, // 1 hour
+    //   `refreshToken=${refreshToken}; HttpOnly; Path=/; Max-Age=604800`, // 7 days
+    // ]);
 
     if (remember) {
       console.log("remember");
