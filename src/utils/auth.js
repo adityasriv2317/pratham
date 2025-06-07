@@ -46,3 +46,11 @@ export async function getUserById(id) {
 
   return null;
 }
+
+export async function getUserByToken(token) {
+  if (!token) return null;
+  const parts = token.split(".");
+  if (parts.length !== 3) return null; // Invalid JWT format
+  const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
+  return await getUserById(payload.id);
+}

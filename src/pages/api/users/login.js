@@ -74,6 +74,7 @@ export default async function handler(req, res) {
       console.log("not remember");
       res.setHeader("Set-Cookie", [
         `accessToken=${accessToken}; HttpOnly; Path=/; Max-Age=3600`, // 1 hour\
+        `refreshToken=${refreshToken}; HttpOnly; Path=/; 421335411`, // Clear on browser close
       ]);
     }
 

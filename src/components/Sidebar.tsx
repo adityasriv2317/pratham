@@ -23,6 +23,7 @@ import {
   MessageCircle,
   BedDouble,
   Contact,
+  Stethoscope,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import axios from "axios";
@@ -42,7 +43,7 @@ const menuItems: Record<
     { label: "Dashboard", href: "/dashboard/admin", icon: BarChart2 },
     { label: "Manage Users", href: "/admin/users", icon: Users },
     { label: "Appointments", href: "/admin/appointments", icon: Calendar },
-    { label: "Departments", href: "/admin/departments", icon: Folder },
+    { label: "Departments", href: "/admin/departments", icon: Stethoscope },
     // { label: "Billing", href: "/admin/billing", icon: CreditCard },
     // { label: "Reports", href: "/admin/reports", icon: FileText },
   ],
@@ -114,12 +115,12 @@ const Sidebar = ({ role }: SidebarProps) => {
   const handleLogout = async () => {
     try {
       const res = await axios.post(
-        "api/users/logout",
+        "/api/auth/logout",
         {},
         { withCredentials: true }
       );
       if (res.status === 200) {
-        window.location.href = "/login"; // Redirect to login page
+        window.location.href = "/login";
       } else {
         console.error("Logout failed");
       }

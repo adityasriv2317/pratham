@@ -28,6 +28,10 @@ const StaffSchema = new mongoose.Schema(
       required: true,
       min: 18,
     },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     timestamps: true,
