@@ -115,12 +115,12 @@ const Sidebar = ({ role }: SidebarProps) => {
   const handleLogout = async () => {
     try {
       const res = await axios.post(
-        "api/users/logout",
+        "/api/auth/logout",
         {},
         { withCredentials: true }
       );
       if (res.status === 200) {
-        window.location.href = "/login"; // Redirect to login page
+        window.location.href = "/login";
       } else {
         console.error("Logout failed");
       }
