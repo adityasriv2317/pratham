@@ -18,28 +18,27 @@ type Appointment = {
 
 const fetchAppointments = async (): Promise<Appointment[]> => {
   if (typeof window === "undefined") return [];
-  const res = await fetch("/api/appointment/appointments");
-  if (!res.ok) throw new Error("Failed to fetch appointments");
-  const data = await res.json();
+  const res = await axios.get("/api/appointment/appointments", {
+    withCredentials: true,
+  });
+  if (res.status !== 200) throw new Error("Failed to fetch appointments");
+  const data = res.data;
   const appointments = data.data || [];
 
   // Fetch doctor details for mapping ObjectId to name
-  // Fix: doctor field in Appointment is a string, but Doctor model _id is ObjectId
-  // Convert all doctorIds to ObjectId for the query
   const doctorIds = Array.from(new Set(appointments.map((a: any) => a.doctor)));
   let doctorMap: Record<string, string> = {};
   if (doctorIds.length > 0) {
     try {
-      // Use string ids directly for the API query
       const docRes = await axios.get(
-      `/api/doctors/doctors?ids=${doctorIds.join(",")}`,
-      { withCredentials: true }
+        `/api/doctors/doctors?ids=${doctorIds.join(",")}`,
+        { withCredentials: true }
       );
       if (docRes.status === 200) {
-      const docData = docRes.data;
-      doctorMap = Object.fromEntries(
-        (docData.doctors || []).map((d: any) => [String(d._id), d.name])
-      );
+        const docData = docRes.data;
+        doctorMap = Object.fromEntries(
+          (docData.doctors || []).map((d: any) => [String(d._id), d.name])
+        );
       }
     } catch {}
   }
