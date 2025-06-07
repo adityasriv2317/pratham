@@ -73,24 +73,24 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex font-oxanium items-stretch bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
+    <div className="min-h-screen max-h-screen flex font-oxanium items-stretch bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
       {/* Left side image section */}
-      <div className="hidden md:flex w-1/2 items-center justify-center bg-gray-950">
+      <div className="hidden md:flex w-1/2 min-h-full max-h-full items-center justify-center bg-gray-950">
         <img
           src={img.src}
           alt="Pratham Hospital Management"
-          className="object-cover max-h-screen min-h-screen drop-shadow-2xl"
+          className="object-cover min-h-full max-h-full drop-shadow-2xl"
         />
       </div>
       {/* Right side login form */}
-      <div className="flex flex-col justify-center w-full md:w-1/2 px-8 py-12 bg-gray-900 bg-opacity-90 shadow-2xl">
+      <div className="flex flex-col max-h-full justify-center w-full md:w-1/2 px-4 sm:px-8 py-4 sm:py-6 bg-gray-900 bg-opacity-90 shadow-2xl overflow-y-auto">
         <h2 className="text-3xl font-extrabold text-center mb-2 text-white tracking-tight">
           Pratham
         </h2>
         <p className="text-center text-gray-400 mb-8 text-lg font-medium">
           Hospital Management System
         </p>
-        <form onSubmit={handleSubmit} className="space-y-6 px-8">
+        <form onSubmit={handleSubmit} className="space-y-6 px-0 sm:px-8 max-h-screen overflow-hidden not-md:overflow-auto">
           <div>
             <label
               htmlFor="email"
