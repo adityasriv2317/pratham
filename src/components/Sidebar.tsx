@@ -23,6 +23,7 @@ import {
   MessageCircle,
   BedDouble,
   Contact,
+  Stethoscope,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import axios from "axios";
@@ -42,7 +43,7 @@ const menuItems: Record<
     { label: "Dashboard", href: "/dashboard/admin", icon: BarChart2 },
     { label: "Manage Users", href: "/admin/users", icon: Users },
     { label: "Appointments", href: "/admin/appointments", icon: Calendar },
-    { label: "Departments", href: "/admin/departments", icon: Folder },
+    { label: "Departments", href: "/admin/departments", icon: Stethoscope },
     // { label: "Billing", href: "/admin/billing", icon: CreditCard },
     // { label: "Reports", href: "/admin/reports", icon: FileText },
   ],
