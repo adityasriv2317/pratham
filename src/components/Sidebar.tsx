@@ -49,13 +49,13 @@ const menuItems: Record<
   doctor: [
     { label: "Dashboard", href: "/dashboard/doctor", icon: BarChart2 },
     { label: "My Patients", href: "/doctor/patients", icon: User },
-    { label: "Appointments", href: "/doctor/appointments", icon: Calendar },
-    {
-      label: "Prescriptions",
-      href: "/doctor/prescriptions",
-      icon: ClipboardList,
-    },
-    { label: "Lab Reports", href: "/doctor/reports", icon: FlaskConical },
+    { label: "My Schedule", href: "/doctor/schedule", icon: Calendar },
+    // {
+    //   label: "Prescriptions",
+    //   href: "/doctor/prescriptions",
+    //   icon: ClipboardList,
+    // },
+    // { label: "Lab Reports", href: "/doctor/reports", icon: FlaskConical },
   ],
   staff: [
     { label: "Dashboard", href: "/dashboard/staff", icon: BarChart2 },

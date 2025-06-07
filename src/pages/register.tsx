@@ -10,7 +10,7 @@ import img from "@/assets/splash.jpeg";
 const roles = [
   { label: "Patient", value: "patient" },
   { label: "Doctor", value: "doctor" },
-  { label: "Staff", value: "staff" },
+  // { label: "Staff", value: "staff" },
   { label: "Admin", value: "admin" },
 ];
 
