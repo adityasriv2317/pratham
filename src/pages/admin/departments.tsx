@@ -147,11 +147,11 @@ export default function DepartmentsPage() {
               Object.entries(departments).map(([dept, docs]) => (
                 <div
                   key={dept}
-                  className="rounded-xl border min-w-72 w-auto aspect-video border-gray-200 p-6 mb-4 shadow bg-white"
+                  className="rounded-xl border min-w-72 w-auto aspect-video border-gray-200 p-6 mb-4 shadow bg-white flex flex-col items-center justify-center gap-4"
                 >
-                  <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center justify-between w-full mb-6">
                     <h2 className="text-2xl font-semibold text-blue-800 flex items-center gap-2">
-                      <Stethoscope className="w-6 h-6 text-blue-600" /> {dept}
+                      <Stethoscope className="w-7 h-7 text-blue-600" /> {dept}
                     </h2>
                     <button
                       className="sticky top-0 right-0 p-2 rounded bg-blue-100 text-blue-800 font-semibold text-sm border border-blue-200 hover:bg-blue-200 transition"
@@ -159,11 +159,14 @@ export default function DepartmentsPage() {
                       aria-expanded={popupDept === dept}
                       aria-controls={`dept-popup-${dept}`}
                     >
-                      <Maximize2 className="w-4 h-4" />
+                      <Maximize2 className="w-5 h-5" />
                     </button>
                   </div>
-                  <div className="text-gray-600 text-sm mt-6 text-center">
-                    {docs.length} doctor{docs.length !== 1 ? "s" : ""}
+                  <div className="flex flex-row items-center gap-2">
+                    <User2 className="w-8 h-8 text-blue-700" />
+                    <div className="text-gray-600 text-sm mt-2 text-center">
+                      {docs.length} doctor{docs.length !== 1 ? "s" : ""}
+                    </div>
                   </div>
                 </div>
               ))
@@ -179,7 +182,7 @@ export default function DepartmentsPage() {
                 onClick={() => setPopupDept(null)}
                 aria-label="Close department details"
               >
-                <Minimize2 />
+                <Minimize2 className="w-6 h-6" />
               </button>
               <h2 className="text-2xl font-bold text-blue-800 w-fit mx-auto flex items-center gap-2 mb-6">
                 <Stethoscope className="w-6 h-6 text-blue-600" /> {popupDept}
@@ -204,10 +207,6 @@ export default function DepartmentsPage() {
                         <Mail className="w-4 h-4 text-blue-600" />
                         <span className="truncate">{doc.email}</span>
                       </div>
-                      {/* <div className="flex items-center gap-2 text-gray-700 text-sm">
-                        <Stethoscope className="w-4 h-4 text-blue-600" />
-                        <span>{doc.specialization}</span>
-                      </div> */}
                       <div className="flex items-center gap-2 text-gray-700 text-sm">
                         <GenderIcon gender={doc.gender} />
                         <span>{doc.gender}</span>
